@@ -1,0 +1,33 @@
+export interface User {
+  id: number
+  first_name: any
+  last_name: any
+  middle_name: any
+  organization: any
+  customer_code: any
+  type: number
+  status: number
+  email: string
+  phone: any
+  firebase_uid: string
+  birthday_at: any
+  itn: any
+  pass_country: any
+  pass_series: any
+  pass_number: any
+  pass_issued_at: any
+  pass_issued_by: any
+  gender: any
+  erp_id: number
+  locale: any
+  country: any
+  lang: string
+  measures: any
+  lat: any
+  lon: any
+  last_ip: any
+  last_access: any
+  created_at: string
+  updated_at: string
+  currency: any
+}
