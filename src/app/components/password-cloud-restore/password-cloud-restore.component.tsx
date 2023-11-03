@@ -5,22 +5,18 @@ import Button from "../../common/button/button.component";
 import FormFieldPassword from "../../common/form-field-password/form-field-password.component";
 import { useStore } from "../../stores/store";
 import { observer } from "mobx-react-lite";
-import { useNavigate, useSearchParams } from "react-router-dom";
-import { AuthContainer } from "../authorization/authorization.styles";
+import { AuthContainer } from "../../routes/authorization/authorization.styles";
 import { CloudPassRestoreContainer } from "./password-cloud-restore.styles";
+import { useState } from "react";
+import CloudRestorePasswordSuccess from "./password-restore-success.component";
 
-const CloudPasswordRestore = () => {
+interface Params {
+  oobCode: string;
+}
 
-  const [searchParams] = useSearchParams();
-  const mode = searchParams.get('mode') ?? "";
-  const oobCode = searchParams.get('oobCode') ?? "";
-  const lang = searchParams.get('lang') ?? "";
-  console.log('mode: ', mode);
-  console.log('oobCode: ', oobCode);
-  console.log('lang: ', lang);
-
-  const { userStore: { passwordResetProgress, resetPasswordFinish, changePassword } } = useStore();
-  const navigate = useNavigate();
+const CloudPasswordRestore = ({ oobCode }: Params) => {
+  const { userStore: { passwordResetProgress, resetPasswordFinish } } = useStore();
+  const [passowrdResetIsDone, setPasswordResetIsDone] = useState(false);
 
   const validationSchema = Yup.object({
     password: Yup.string()
@@ -33,22 +29,18 @@ const CloudPasswordRestore = () => {
   })
 
   const handleFormSubmit = async (formValues: any, formikHelpers: FormikHelpers<any>) => {
-    switch (mode) {
-      case 'resetPassword':
-        try {
-          await resetPasswordFinish(oobCode, formValues.password);
-        } catch (error) {
-          alert(error);
-          console.error(error);
-        }
-        break;
-
-      default:
-        await changePassword(formValues.password)
-        break;
+    try {
+      await resetPasswordFinish(oobCode, formValues.password);
+    } catch (error) {
+      alert(error);
+      console.error(error);
     }
     formikHelpers.resetForm();
-    navigate("/auth/pswd/success");
+    setPasswordResetIsDone(true);
+  }
+
+  if (passowrdResetIsDone) {
+    return (<CloudRestorePasswordSuccess />)
   }
 
   let initialValues = {

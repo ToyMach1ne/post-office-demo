@@ -2,10 +2,13 @@ import { initializeApp } from "firebase/app";
 import {
   getAuth,
   signInWithPopup,
+  signInWithRedirect,
+  getRedirectResult,
   GoogleAuthProvider,
   OAuthProvider,
   createUserWithEmailAndPassword,
   sendEmailVerification,
+  applyActionCode,
   signInWithEmailAndPassword,
   signOut,
   onAuthStateChanged,
@@ -43,6 +46,15 @@ appleProvider.addScope('name');
 
 export const auth = getAuth();
 export const signInWithGooglePopup = () => signInWithPopup(auth, googleProvider);
+export const signInWithApplePopup = async () => {
+  return await signInWithPopup(auth, appleProvider);
+}
+
+export const signInWithGoogleRedirectAsync = async () => await signInWithRedirect(auth, googleProvider);
+
+export const signInWithAppleRedirectAsync = async () => await signInWithRedirect(auth, appleProvider);
+
+export const getRedirectResultAsync = async () => await getRedirectResult(auth);
 
 export const createAuthUserWithEmailAndPassword = async (email: string, password: string) => {
   return await createUserWithEmailAndPassword(auth, email, password);
@@ -57,10 +69,6 @@ export const sendEmailVerificationAsync = async () => {
 export const signInWithEmailAndPasswordAsync = async (email: string, password: string) => {
   return await signInWithEmailAndPassword(auth, email, password);
 };
-
-export const signInWithApplePopup = async () => {
-  return await signInWithPopup(auth, appleProvider);
-}
 
 export const signOutUser = async () => { 
   signOut(auth); 
@@ -96,4 +104,8 @@ export const sendPasswordResetEmailAsync = async (email: string) => {
 
 export const confirmPasswordResetAsync = async (oobCode: string, newPassword: string) => {
   await confirmPasswordReset(auth, oobCode, newPassword);
+}
+
+export const confirmEmailVerification = async (oobCode: string) => {
+  await applyActionCode(auth, oobCode);
 }

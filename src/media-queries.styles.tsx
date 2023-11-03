@@ -15,6 +15,7 @@ export const MediaQueries = css`
   @media (max-width: 650px) {
     ${AuthContainer} {
       padding: 5rem;
+      margin-top: 0;
     }
 
     body {
@@ -36,7 +37,7 @@ export const MediaQueries = css`
 
   @media (max-width: 490px) {
     ${AuthContainer} {
-      padding: 5rem 3rem;
+      padding: 2.4rem 3rem;
     }
   }
 

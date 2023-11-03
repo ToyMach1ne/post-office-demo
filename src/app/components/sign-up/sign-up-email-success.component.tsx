@@ -3,8 +3,25 @@ import { HeaderMain, Link, TextBody } from "../../common/typography/typography.s
 import { AuthMessageScreen } from "../auth-message-screen/auth-message-screen.styles";
 import { AuthContainer } from "../../routes/authorization/authorization.styles";
 import { ReactComponent as SuccessIcon } from "../../assets/success-mark-icon.svg";
+import { useEffect } from "react";
+import { useStore } from "../../stores/store";
+import Spinner from "../../common/spinner/spinner.component";
 
-const CloudRestorePasswordSuccess = () => {
+interface Params {
+  oobCode: string;
+}
+
+const SignUpEmailSuccess = ({ oobCode }: Params) => {
+
+  const { userStore: { signUpFinishEmailVerification, emailVerificationProgress } } = useStore();
+
+  useEffect(() => {
+    signUpFinishEmailVerification(oobCode);
+  }, [oobCode, signUpFinishEmailVerification]);
+
+  if (emailVerificationProgress)
+    return (<AuthContainer><Spinner /></AuthContainer>)
+
   return (
     <AuthContainer>
       <AuthMessageScreen>
@@ -19,4 +36,4 @@ const CloudRestorePasswordSuccess = () => {
   )
 }
 
-export default observer(CloudRestorePasswordSuccess);
+export default observer(SignUpEmailSuccess);

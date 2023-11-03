@@ -1,7 +1,7 @@
 import { observer } from "mobx-react-lite";
 import { HeaderMain, Link, TextBody } from "../../common/typography/typography.styles";
-import { AuthMessageScreen } from "../../components/auth-message-screen/auth-message-screen.styles";
-import { AuthContainer } from "../authorization/authorization.styles";
+import { AuthMessageScreen } from "../auth-message-screen/auth-message-screen.styles";
+import { AuthContainer } from "../../routes/authorization/authorization.styles";
 import { ReactComponent as SuccessIcon } from "../../assets/success-mark-icon.svg";
 
 const CloudRestorePasswordSuccess = () => {

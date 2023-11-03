@@ -2,13 +2,19 @@ import { makeAutoObservable, runInAction } from "mobx";
 import { User } from "../models/user";
 import { store } from "./store";
 import agent from "../api/agent";
-import { signInWithGooglePopup, 
+import {
   createAuthUserWithEmailAndPassword, 
   sendEmailVerificationAsync, 
   signInWithEmailAndPasswordAsync, 
   sendPasswordResetEmailAsync, 
-  confirmPasswordResetAsync, 
-  signInWithApplePopup} from "../utils/firebase/firebase.utils";
+  confirmPasswordResetAsync,
+  // signInWithGoogleRedirectAsync,
+  // getRedirectResultAsync,
+  // signInWithAppleRedirectAsync,
+  confirmEmailVerification,
+  signInWithGooglePopup,
+  signInWithApplePopup,
+} from "../utils/firebase/firebase.utils";
 
 export default class UserStore {
   user: User | null = null;
@@ -18,6 +24,7 @@ export default class UserStore {
   emailSignInProgress: boolean = false;
   signUpInProgress: boolean = false;
   passwordResetProgress: boolean = false;
+  emailVerificationProgress: boolean = false;
 
   constructor() {
     makeAutoObservable(this);
@@ -27,6 +34,11 @@ export default class UserStore {
     this.googleSignInProgress = true;
     try {
       const authUser = await signInWithGooglePopup();
+      // await signInWithGoogleRedirectAsync();
+      // const authUser = await getRedirectResultAsync();
+      
+      // if (!authUser) return;
+
       const firebaseToken = (authUser.user as any).accessToken;
       const firebaseUid = authUser.user.uid;
 
@@ -55,6 +67,11 @@ export default class UserStore {
     this.appleSignInProgress = true;
     try {
       const authUser = await signInWithApplePopup();
+      // await signInWithAppleRedirectAsync();
+      // const authUser = await getRedirectResultAsync();
+      
+      // if (!authUser) return;
+
       const firebaseToken = (authUser.user as any).accessToken;
       const firebaseUid = authUser.user.uid;
 
@@ -133,6 +150,20 @@ export default class UserStore {
     } finally {
       runInAction(() => {
         this.signUpInProgress = false;
+      })
+    }
+  }
+
+  signUpFinishEmailVerification = async (oobCode: string) => {
+    this.emailVerificationProgress = true;
+    
+    try {
+      await confirmEmailVerification(oobCode);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      runInAction(() => {
+        this.emailVerificationProgress = false;
       })
     }
   }

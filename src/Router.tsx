@@ -1,8 +1,7 @@
 import { Navigate, RouteObject, createBrowserRouter } from "react-router-dom";
 import App from "./App";
 import Authorization from "./app/routes/authorization/authorization.component";
-import CloudPasswordRestore from "./app/routes/password-cloud-restore/password-cloud-restore.component";
-import CloudRestorePasswordSuccess from "./app/routes/password-cloud-restore/password-restore-success.component"
+import EmailActionRouter from "./app/routes/email-action-router/email-action-router.component";
 
 export const routes: RouteObject[] = [
   {
@@ -14,8 +13,7 @@ export const routes: RouteObject[] = [
       // { path: 'createActivity', element: <ActivityForm key='create' /> },
       // { path: 'manage/:id', element: <ActivityForm key='manage' /> },
       { path: 'auth', element: <Authorization /> },
-      { path: 'auth/pswd', element: <CloudPasswordRestore /> },
-      { path: 'auth/pswd/success', element: <CloudRestorePasswordSuccess /> },
+      { path: 'auth/action', element: <EmailActionRouter /> },
       { path: '*', element: <Navigate replace to='/not-found' /> },
     ]
   }

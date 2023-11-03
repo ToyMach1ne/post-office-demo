@@ -11,6 +11,7 @@ export const NavigationContainer = styled.div`
 
   z-index: 10000;
   background-color: ${Colors.grayLight3};
+  padding: 0 2rem;
 `;
 
 export const LogoContainer = styled(Link)`
