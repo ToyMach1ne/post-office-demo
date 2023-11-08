@@ -1,5 +1,4 @@
 import { FooterContainer, FooterContent } from "./footer.styles";
-import { useState, useEffect } from "react";
 import FooterTop from "./footer-top.component";
 import FooterBottom from "./footer-bottom.component";
 
