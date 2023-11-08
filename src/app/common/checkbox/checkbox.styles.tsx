@@ -39,13 +39,13 @@ export const CheckboxContainer = styled.label`
     
     span:focus {
       outline: none;
-      border: 1px solid ${Colors.blueLight};
+      border: 1px solid ${Colors.blue3};
       box-shadow: 0 0 0 3px ${Colors.blueLight3};
     }
 
     span:active {
       outline: none;
-      border: 1px solid ${Colors.blueLight};
+      border: 1px solid ${Colors.blue3};
       box-shadow: 0 0 0 3px #89caff;
     }
 
@@ -54,8 +54,8 @@ export const CheckboxContainer = styled.label`
     }
 
     input:checked ~ span {
-      background-color: ${Colors.blueLight2};
-      border: 1px solid ${Colors.blueLight2};
+      background-color: ${Colors.blue4};
+      border: 1px solid ${Colors.blue4};
     }
 
     input:checked ~ span svg{

@@ -5,30 +5,44 @@ import { Colors } from "../../common/typography/typography.styles";
 
 export const NavigationContainer = styled.div`
   width: 100%;
+  background-color: ${Colors.grayLight6};
+  padding: 8px 0;
+`;
+
+export const NavContent = styled.div`
+  max-width: 144rem;
+  padding: 0 1.6rem;
   display: flex;
   justify-content: space-between;
-  margin-bottom: 1rem;
+  margin: 0 auto;
+`;
 
-  z-index: 10000;
-  background-color: ${Colors.grayLight3};
-  padding: 0 2rem;
+export const LeftSide = styled.div`
+  display: flex;
+  justify-content: space-between;
+  gap: 1.6rem;
 `;
 
 export const LogoContainer = styled(Link)`
-  height: 100%;
-  width: 7rem;
   display: flex;
   align-items: center;
   justify-content: center;
 `;
 
-export const LinkContainer = styled.div`
-  width: 50%;
+export const ServicesContainer = styled.div`
+  padding-left: 1.6rem;
+  border-left: 1px solid ${Colors.gray2};
+  display: flex;
+  align-items: center;
+`
+
+export const RightSide = styled.div`
+  /* width: 50%; */
   height: 100%;
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  gap: 10px;
+  gap: 1.6rem;
 `;
 
 export const NavLink = styled(Link)`

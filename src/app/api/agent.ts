@@ -6,7 +6,7 @@ import { AuthResponse } from "../models/authResponse";
 
 export const sleep = (delayMs: number) => new Promise(resolve => setTimeout(resolve, delayMs));
 
-axios.defaults.baseURL = process.env.REACT_APP_API_URL ?? 'https://dev-ic2c.meest.com/api/v1';
+axios.defaults.baseURL = process.env.API_URL ?? 'https://dev-ic2c.meest.com/api/v1';
 
 axios.interceptors.request.use(config => {
   const token = store.commonStore.meestToken;

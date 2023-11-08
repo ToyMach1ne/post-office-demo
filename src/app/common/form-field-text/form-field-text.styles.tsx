@@ -43,7 +43,7 @@ export const InputContainer = styled.div<FieldProps>`
     }
 
     &:focus {
-      border: 1px solid ${Colors.blueLight};
+      border: 1px solid ${Colors.blue4};
     }
   }
 

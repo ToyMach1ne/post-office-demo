@@ -9,7 +9,7 @@ export const SeparatorContainer = styled.div`
   gap: 9px;
 
   font-size: ${FontSizes.medium};
-  color: ${Colors.blueLight};
+  color: ${Colors.blue3};
   font-weight: 700;
   letter-spacing: 1px;
   line-height: 3.2rem;

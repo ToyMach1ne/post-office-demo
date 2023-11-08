@@ -1,23 +1,38 @@
-import { LinkContainer, LogoContainer, NavigationContainer } from "./navigation.styles";
+import { LeftSide, LogoContainer, NavContent, NavigationContainer, RightSide, ServicesContainer } from "./navigation.styles";
 import { ReactComponent as MeestLogo } from "../../assets/meest-logo.svg";
-import { ReactComponent as GlobusIcon } from "../../assets/globus-icon.svg";
-import MenuButton from "../../common/menu-button/menu-button.component";
 import { observer } from "mobx-react-lite";
-import { useStore } from "../../stores/store";
+import Services from "../services/services.component";
+import NavHelp from "../nav-help/nav-help.component";
+import NavLangDropdown from "../nav-lang-dropdown/nav-lang.component";
+import NavSignin from "../nav-signin-btn/nav-signin.component";
+import { useLocation } from "react-router-dom";
+import NavNotifications from "../nav-notifications/nav-notifications.components";
 
 const Navigation = () => {
 
-  const { navStore: { toggleSidebar, isSidebarOpened } } = useStore();
+  const location = useLocation();
+
+  // Access the current path from the location object
+  const currentPath = location.pathname;
 
   return (
     <NavigationContainer>
-      <LogoContainer to="/">
-        <MeestLogo />
-      </LogoContainer>
-      <LinkContainer>
-        <GlobusIcon />
-        <MenuButton onClick={() => toggleSidebar()} isOpened={isSidebarOpened} />
-      </LinkContainer>
+      <NavContent>
+        <LeftSide>
+          <LogoContainer to="/">
+            <MeestLogo />
+          </LogoContainer>
+          <ServicesContainer>
+            <Services />
+          </ServicesContainer>
+        </LeftSide>
+        <RightSide>
+          <NavHelp />
+          <NavNotifications />
+          <NavLangDropdown />
+          {currentPath !== '/auth' && <NavSignin />}
+        </RightSide>
+      </NavContent>
     </NavigationContainer>)
 }
 

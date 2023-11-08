@@ -11,19 +11,23 @@ enum FontSizes {
 enum Colors {
   blue = '#005FAD', // btn background
   blue2 = '#0070CC', // tab bottom border
-  blueLight = '#0061AF', // links
-  blueLight2 = '#008CFF', // checbox checked
+  blue3 = '#0061AF', // links
+  blue4 = '#008CFF', // checbox checked,
   blueLight3 = '#B3DDFF',
   blueDisabled = '#C1DBF0', // disabled button
   gray = '#5A6673', // normal text
   gray2 = '#75777B', // tab title, checkbox unchecked border
+  gray3 = '#96999E', // nav text, nav btn active
+  gray4 = '#B7B9BD', // nav btn hover
   grayLight = '#7B8085', // label text, checkbox descr. text
   grayLight2 = '#96999E', // nav icons
   grayLight3 = '#DCDDE0', // input borders
   grayLight4 = '#E0E3E7', // placeholder text
   grayLight5 = '#EAECEE', // password validation marker background
+  grayLight6 = '#F5F6F7', // nav background
   grayDark = '#334150', // headings
-  grayDark2 = '#2C363F', // text in inputs, sidebar title
+  grayDark2 = '#2C363F', // text in inputs, sidebar title, footer header3
+  grayDark3 = '#2C2C2C', // text copyright
   white = '#FFFFFF',
   red = '#ED5576',
   green = '#57C278',
@@ -67,7 +71,7 @@ const TextBody = styled.p`
 
 const TextLabel = styled.label`
   font-size: ${FontSizes.normal};
-  font-weight: 400;
+  font-weight: 500;
   line-height: 2rem;
   color: ${Colors.grayLight};
 `
@@ -128,6 +132,38 @@ const TextPopup = styled.span<CaptionProps>`
   color:  ${({ color }) => !color ? Colors.grayDark2 : color === 'green' ? Colors.green : Colors.red};
 `
 
+interface TextMenuProps {
+  color: 'normal' | 'active' | 'nav';
+}
+
+const TextMenu = styled.span<TextMenuProps>`
+  font-size: ${FontSizes.small};
+  font-weight: 500;
+  line-height: 1.6rem;
+  letter-spacing: .5px;
+  color: ${({color}) => 
+      color === 'nav' ? Colors.gray2
+    : color === 'active' ? Colors.blue
+    : Colors.grayDark2}
+`
+
+const TextNavMenu = styled.span`
+  font-size: ${FontSizes.normal};
+  font-style: normal;
+  font-weight: 500;
+  line-height: 2rem; /* 142.857% */
+  letter-spacing: 0.5px;
+  color: ${Colors.gray2}
+`
+
+const TextCopyright = styled.span`
+  font-size: ${FontSizes.small};
+  font-weight: 500;
+  line-height: 1.6rem;
+  letter-spacing: .5px;
+  color: ${Colors.grayDark3};
+`
+
 interface LinkProps {
   bold?: boolean;
 }
@@ -142,7 +178,7 @@ const Link = styled.a<LinkProps>`
   }
     line-height: 2rem;
     letter-spacing: .5px;
-    color: ${Colors.blueLight};
+    color: ${Colors.blue3};
     text-decoration: none;
     border-bottom: 1px solid transparent;
     transition: all .2s;
@@ -150,7 +186,7 @@ const Link = styled.a<LinkProps>`
 
   &:hover,
   &:active {
-    border-bottom: 1px solid ${Colors.blueLight};
+    border-bottom: 1px solid ${Colors.blue3};
   }
 `
 
@@ -161,9 +197,9 @@ const LinkSmall = styled.a`
     font-weight: 400;
     line-height: 2rem;
     letter-spacing: .5px;
-    color: ${Colors.blueLight};
+    color: ${Colors.blue3};
     text-decoration: none;
-    border-bottom: 1px solid ${Colors.blueLight};
+    border-bottom: 1px solid ${Colors.blue3};
     transition: all .2s;
   }
 
@@ -172,6 +208,26 @@ const LinkSmall = styled.a`
     border-bottom: 1px solid transparent;
   }
 `
+
+const LinkFooter = styled.a`
+  &:link,
+  &:visited {
+    font-size: ${FontSizes.normal};
+    font-weight: 400;
+    line-height: 2rem;
+    letter-spacing: .5px;
+    color: ${Colors.grayDark3};
+    text-decoration: none;
+    /* border-bottom: 1px solid transparent;
+    transition: all .2s; */
+  }
+  
+  &:hover,
+  &:active {
+    /* border-bottom: 1px solid ${Colors.grayDark3}; */
+  }
+`
+
 export {
   HeaderMain,
   HeaderSecondary,
@@ -185,8 +241,12 @@ export {
   TextValidation,
   TextPopup,
   TextButton,
+  TextMenu,
+  TextNavMenu,
+  TextCopyright,
   Link,
   LinkSmall,
+  LinkFooter,
   FontSizes,
   Colors
 };

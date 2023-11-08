@@ -8,6 +8,7 @@ import { observer } from "mobx-react-lite";
 import { SignInContainer } from "./sign-in.styles.component";
 import Separator from "../../common/separator/separator.component";
 import { useStore } from "../../stores/store";
+import { useTranslation } from "react-i18next";
 
 
 interface SignInFormValues {
@@ -23,6 +24,8 @@ const SignIn = () => {
     googleLogin,
     appleLogin,
     emailLogin } } = useStore();
+
+  const {t} = useTranslation();
 
   const validationSchema = Yup.object({
     email: Yup.string()
@@ -45,7 +48,7 @@ const SignIn = () => {
 
   return (
     <SignInContainer>
-      <HeaderMain>Let's let you in</HeaderMain>
+      <HeaderMain>{t("Let's let you in")}</HeaderMain>
 
       <Formik
         enableReinitialize

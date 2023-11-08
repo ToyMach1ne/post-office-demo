@@ -1,5 +1,5 @@
 import { Outlet } from "react-router-dom";
-import { GlobalStyles } from "./global.styles";
+import { AppContainer, GlobalStyles } from "./global.styles";
 import Navigation from "./app/components/navigation/navigation.component";
 import Sidebar from "./app/common/sidebar/sidebar.component";
 import { observer } from "mobx-react-lite";
@@ -7,6 +7,7 @@ import { useStore } from "./app/stores/store";
 import { useEffect } from "react";
 import Spinner from "./app/common/spinner/spinner.component";
 import { v4 } from "uuid";
+import Footer from "./app/components/footer/footer.component";
 
 function App() {
 
@@ -27,12 +28,13 @@ function App() {
   if (!commonStore.appLoaded) return <Spinner />
 
   return (
-    <>
+    <AppContainer>
       <GlobalStyles />
       <Navigation />
       {(isSidebarOpened || isSidebarClosing) && <Sidebar />}
       <Outlet />
-    </>
+      <Footer />
+    </AppContainer>
   );
 }
 

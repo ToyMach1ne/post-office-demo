@@ -7,6 +7,7 @@ import { FieldPasswordContainer } from "./form-field-password.styles";
 import { v4 } from "uuid";
 import { observer } from "mobx-react-lite";
 import { useStore } from "../../stores/store";
+import { useTranslation } from "react-i18next";
 
 interface Props {
   name: string;
@@ -34,6 +35,7 @@ const FormFieldPassword = ({ name, placeholder, label, tabIndex, shouldValidateP
   const [field, meta] = useField(name);
   const [isPassShown, setPassShown] = useState(false);
   const { navStore: { togglePasswordResetFormShown } } = useStore();
+  const { t } = useTranslation();
 
   // to switch between show/hide password
   let inputTypeToDisplay = 'password';
@@ -60,7 +62,7 @@ const FormFieldPassword = ({ name, placeholder, label, tabIndex, shouldValidateP
     <FieldPasswordContainer>
       <InputContainer error={meta.touched && !!meta.error}>
         <TextLabel htmlFor={name + uuid}>{label}</TextLabel>
-        {forgotPassword && <Link onClick={(e) => handlePassResetClick(e)} href={""}>Forgot your password?</Link>}
+        {forgotPassword && <Link onClick={(e) => handlePassResetClick(e)} href={""}>{t("Forgot your password?")}</Link>}
         <input
           tabIndex={tabIndex ?? -1}
           type={inputTypeToDisplay}

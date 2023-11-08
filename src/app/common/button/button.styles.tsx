@@ -1,8 +1,9 @@
 import styled, { css } from "styled-components";
 import { Colors, TextButton } from "../typography/typography.styles";
 import { SpinnerCircle } from "../spinner/spinner.styles";
+import { ComponentPropsWithoutRef } from "react";
 
-interface Props {
+interface Props extends ComponentPropsWithoutRef<"button"> {
   disabled?: boolean;
   isLoading?: boolean;
 }
@@ -28,7 +29,7 @@ export const BaseButton = styled.button<Props>`
   }
 
   &:hover {
-    background-color: ${Colors.blueLight2};
+    background-color: ${Colors.blue4};
   }
 
   &:active {
