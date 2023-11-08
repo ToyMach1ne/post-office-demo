@@ -30,5 +30,4 @@ export const GlobalStyles = createGlobalStyle`
 export const AppContainer = styled.div`
   overflow-y: scroll;
   height: 100vh;
-  padding-bottom: 4.4rem;
 `

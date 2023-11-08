@@ -22,6 +22,7 @@ export const MediaQueries = css`
     ${FooterContainer} {
       padding-top: 1.6rem;
       padding-bottom: 1.6rem;
+      bottom: -48rem;
     }
 
     ${FooterBottomContainer} {
@@ -38,7 +39,7 @@ export const MediaQueries = css`
     }
 
     ${FooterContainer} {
-      bottom: -94.5rem;
+      bottom: -112rem;
     }
 
     ${NavLangButton} {
@@ -96,6 +97,7 @@ export const MediaQueries = css`
   @media (max-width: 490px) {
     ${AuthContainer} {
       padding: 2.4rem 3rem;
+      height: auto;
     }
   }
 

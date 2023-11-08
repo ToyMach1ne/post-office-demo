@@ -4,7 +4,7 @@ import { InputDropdownContainer } from "../../common/input-dropdown/input-dropdo
 
 export const FooterContainer = styled.div`
   position: absolute;
-  bottom: -32rem;
+  bottom: -36.5rem;
   width: 100%;
   background-color: ${Colors.grayLight6};
   margin-top: 1.6rem;
@@ -28,10 +28,6 @@ export const FooterContent = styled.div`
   max-width: 144rem;
   padding: 0 1.6rem;
   margin: 0 auto;
-
-  /* &:hover ${FooterTopContainer} {
-    display: grid;
-  } */
 `
 
 export const FooterColumn = styled.div`
