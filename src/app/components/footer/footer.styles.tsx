@@ -7,7 +7,6 @@ export const FooterContainer = styled.div`
   bottom: -36.5rem;
   width: 100%;
   background-color: ${Colors.grayLight6};
-  margin-top: 1.6rem;
   overflow: scroll;
 
   ${InputDropdownContainer} {
