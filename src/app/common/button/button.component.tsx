@@ -25,11 +25,10 @@ const getButton = (type = BUTTON_TYPES.base): typeof BaseButton =>
   [BUTTON_TYPES.apple]: AppleSigninButton,
 }[type]);
 
-// const Button = ({ isLoading, buttonType, children, ...otherProps }: Props) => {
 const Button = ({ isLoading, buttonType, children, type, tabIndex, disabled, onClick }: Props) => {
   const CustomButton = getButton(buttonType);
   return (
-    <CustomButton isLoading={isLoading} type={type} tabIndex={tabIndex} disabled={disabled}>
+    <CustomButton isLoading={isLoading} type={type} tabIndex={tabIndex} disabled={disabled} onClick={onClick}>
       {!isLoading && buttonType === BUTTON_TYPES.google && <GoogleIcon />}
       {!isLoading && buttonType === BUTTON_TYPES.apple && <AppleIcon />}
       {isLoading
