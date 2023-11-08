@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { Colors, FontSizes, TextInput, TextLabel } from "../typography/typography.styles";
+import { Colors, FontSizes, TextLabel } from "../typography/typography.styles";
 
 export const InputDropdownContainer = styled.div`
   ${TextLabel} {

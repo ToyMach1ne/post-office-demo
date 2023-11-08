@@ -12,15 +12,15 @@ const FooterBottom = () => {
     <FooterBottomContainer>
       <TextCopyright>Copyright © 2013–2024 Meest.com™. All rights reserved</TextCopyright>
       <SocialLinksContainer>
-        <a href=""><FbIcon /></a>
-        <a href=""><TwitterIcon /></a>
-        <a href=""><LinkedInIcon /></a>
-        <a href=""><InstagramIcon /></a>
+        <a href="http://localhost:3000"><FbIcon /></a>
+        <a href="http://localhost:3000"><TwitterIcon /></a>
+        <a href="http://localhost:3000"><LinkedInIcon /></a>
+        <a href="http://localhost:3000"><InstagramIcon /></a>
       </SocialLinksContainer>
       <AppLinksContainer>
-        <a href=""><GoogleMarketIcon /></a>
+        <a href="http://localhost:3000"><GoogleMarketIcon /></a>
         <span>or</span>
-        <a href=""><AppleStoreIcon /></a>
+        <a href="http://localhost:3000"><AppleStoreIcon /></a>
       </AppLinksContainer>
     </FooterBottomContainer>
   )

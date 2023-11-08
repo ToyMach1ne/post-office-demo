@@ -18,6 +18,7 @@ const InputDropdown = ({items, label, selectedIndexDefault = 0, onSelected = und
 
   const onSelect = (arg: Option) => {
     console.log(arg);
+    setSelectedIndex(0); // To be improved
   }
 
   return (
