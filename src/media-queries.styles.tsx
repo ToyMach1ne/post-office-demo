@@ -20,7 +20,6 @@ export const MediaQueries = css`
   @media (max-width: 900px) {
 
     ${FooterContainer} {
-      padding-top: 1.6rem;
       padding-bottom: 1.6rem;
       bottom: -48rem;
     }
@@ -40,6 +39,10 @@ export const MediaQueries = css`
 
     ${FooterContainer} {
       bottom: -112rem;
+    }
+
+    ${FooterTopContainer} {
+      padding-top: 1.6rem;
     }
 
     ${NavLangButton} {
