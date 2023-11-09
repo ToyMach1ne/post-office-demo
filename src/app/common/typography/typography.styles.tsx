@@ -153,7 +153,7 @@ const TextNavMenu = styled.span`
   font-weight: 500;
   line-height: 2rem; /* 142.857% */
   letter-spacing: 0.5px;
-  color: ${Colors.gray2}
+  color: ${Colors.gray2};
 `
 
 const TextCopyright = styled.span`

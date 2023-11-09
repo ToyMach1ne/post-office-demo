@@ -1,6 +1,6 @@
 import { useSearchParams } from "react-router-dom";
-import CloudPasswordRestore from "../../components/password-cloud-restore/password-cloud-restore.component";
-import SignUpEmailSuccess from "../../components/sign-up/sign-up-email-success.component";
+import CloudPasswordRestore from "../../features/authentication/password-cloud-restore/password-cloud-restore.component";
+import SignUpEmailSuccess from "../../features/authentication/sign-up/sign-up-email-success.component";
 
 const EmailActionModes = {
   resetPassword: 'resetPassword',

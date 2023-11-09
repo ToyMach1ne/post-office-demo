@@ -1,14 +1,17 @@
 import { css } from "styled-components";
 import { AuthContainer } from "./app/routes/authorization/authorization.styles";
-import { Colors, TextNavMenu } from "./app/common/typography/typography.styles";
-import { NavigationContainer } from "./app/components/navigation/navigation.styles";
+import { Colors } from "./app/common/typography/typography.styles";
+import { NavigationContainer } from "./app/features/navigation/navigation.styles";
 import { PasswordValidatorContainer } from "./app/common/password-validator/password-validator.styles";
 import { SidebarContainer } from "./app/common/sidebar/sidebar.styles";
-import { FooterBottomContainer, FooterContainer, FooterTopContainer } from "./app/components/footer/footer.styles";
-import { NavLangButton, NavLangMenu } from "./app/components/nav-lang-dropdown/nav-lang.styles";
-import { SignInNavButton } from "./app/components/nav-signin-btn/nav-signin.styles";
-import { ServicesNavButton } from "./app/components/services/services.styles";
-import { HelpNavButton } from "./app/components/nav-help/nav-help.styles";
+import { FooterBottomContainer, FooterContainer, FooterTopContainer } from "./app/features/footer/footer.styles";
+import { NavLangButton, NavLangContainer } from "./app/features/navigation/nav-lang-popup/nav-lang.styles";
+import { SignInNavButton } from "./app/features/navigation/nav-signin-btn/nav-signin.styles";
+import { ServicesNavButton } from "./app/features/navigation/nav-services/services.styles";
+import { HelpNavButton } from "./app/features/navigation/nav-help/nav-help.styles";
+import { NavBtn } from "./app/common/nav-btn/nav-btn.styles";
+import { UserNavBtn, UserNavContainer } from "./app/features/navigation/nav-user/nav-user.styles";
+import { NavPopup } from "./app/features/navigation/nav-popup/nav-popup.styles";
 
 export const MediaQueries = css`
   @media (max-height: 720px) {
@@ -45,28 +48,30 @@ export const MediaQueries = css`
       padding-top: 1.6rem;
     }
 
-    ${NavLangButton} {
-      *:not(:first-child) {
+    ${NavLangButton}, ${UserNavBtn} {
+      & > *:not(:first-child) {
         display: none;
       }
     }
 
-    ${NavLangMenu} {
-      left: -11rem;
+    ${UserNavContainer} {
+      ${NavPopup} {
+        left: -13rem;
+      }
+    }
+
+    ${NavLangContainer} {
+      ${NavPopup} {
+        left: -11rem;
+      }
     }
     
-    ${SignInNavButton} {
-      *:not(:first-child) {
-        display: none;
-      }
-    }
-
-    ${ServicesNavButton} {
-      svg:nth-child(2) {
-        display: inline-block;
+    ${SignInNavButton}, ${ServicesNavButton} {
+      & > ${NavBtn}:nth-child(2) {
+        display: flex;
       }
 
-      svg:not(:nth-child(2)), ${TextNavMenu} {
+      & > *:not(:nth-child(2)) {
         display: none;
       }
     }

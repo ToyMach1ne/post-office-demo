@@ -1,7 +1,7 @@
-import { css } from "styled-components";
+import styled from "styled-components";
 import { Colors } from "../typography/typography.styles";
 
-export const NavBtn = css`
+export const NavBtn = styled.span`
   display: flex;
   justify-content: center;
   align-items: center;

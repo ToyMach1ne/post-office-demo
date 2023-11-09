@@ -1,13 +1,13 @@
 import { Outlet } from "react-router-dom";
 import { AppContainer, GlobalStyles } from "./global.styles";
-import Navigation from "./app/components/navigation/navigation.component";
+import Navigation from "./app/features/navigation/navigation.component";
 import Sidebar from "./app/common/sidebar/sidebar.component";
 import { observer } from "mobx-react-lite";
 import { useStore } from "./app/stores/store";
 import { useEffect } from "react";
 import Spinner from "./app/common/spinner/spinner.component";
 import { v4 } from "uuid";
-import Footer from "./app/components/footer/footer.component";
+import Footer from "./app/features/footer/footer.component";
 
 function App() {
 

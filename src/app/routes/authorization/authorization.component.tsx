@@ -1,12 +1,12 @@
 import { observer } from "mobx-react-lite";
 import { AuthContainer } from "./authorization.styles";
 
-import AuthTabs from "../../components/auth-tabbed-container/auth-tabbed-container.component";
-import SignUpEmailSent from "../../components/sign-up/sign-up-email-sent.component";
+import AuthTabs from "../../features/authentication/auth-tabbed-container/auth-tabbed-container.component";
+import SignUpEmailSent from "../../features/authentication/sign-up/sign-up-email-sent.component";
 
 import { useStore } from "../../stores/store";
-import PasswordRestore from "../../components/password-restore/password-restore.component";
-import RestoreEmailSent from "../../components/password-restore/restore-email-sent.component";
+import PasswordRestore from "../../features/authentication/password-restore/password-restore.component";
+import RestoreEmailSent from "../../features/authentication/password-restore/restore-email-sent.component";
 
 const Authorization = () => {
 
