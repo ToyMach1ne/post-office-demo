@@ -1,11 +1,12 @@
 import styled, { css } from "styled-components";
-import { Colors, TextButton } from "../typography/typography.styles";
+import { Colors, TextButton, TextButtonThin } from "../typography/typography.styles";
 import { SpinnerCircle } from "../spinner/spinner.styles";
 import { ComponentPropsWithoutRef } from "react";
 
 interface Props extends ComponentPropsWithoutRef<"button"> {
   disabled?: boolean;
   isLoading?: boolean;
+  contentStyle?: 'normal' | 'thin';
 }
 
 export const BaseButton = styled.button<Props>`
@@ -16,7 +17,11 @@ export const BaseButton = styled.button<Props>`
   border: none;
   background-color: ${Colors.blue};
   color: white;
-  ${TextButton};
+
+  ${({ contentStyle }) => contentStyle === 'thin' 
+    ? css`${TextButtonThin}`
+    : css`${TextButton}`}
+
   padding: 10px 0;
   border-radius: 10px;
   cursor: pointer;
@@ -48,6 +53,55 @@ export const BaseButton = styled.button<Props>`
       background-color: ${Colors.blue2};
       pointer-events: none!important;
     `
+  }
+`
+
+export const NeutralButton = styled(BaseButton)`
+  background-color: transparent;
+  border: transparent;
+  color: ${Colors.grayDark2};
+
+  &:hover {
+    background-color: ${Colors.grayDark2};
+    color: ${Colors.white};
+  }
+`
+
+export const InvertedButton = styled(BaseButton)`
+  background-color: ${Colors.white};
+  border: 1px solid ${Colors.blue};
+  color: ${Colors.blue};
+
+  &:hover {
+    background-color: ${Colors.blue};
+    color: ${Colors.white};
+  }
+`
+
+export const InvertedDangerButton = styled(BaseButton)`
+  background-color: ${Colors.white};
+  border: 1px solid ${Colors.lightRed};
+  color: ${Colors.lightRed};
+
+  &:hover {
+    background-color: ${Colors.lightRed};
+    color: ${Colors.white};
+  }
+
+  &:focus {
+    box-shadow: none;
+  }
+`
+
+export const DangerButton = styled(BaseButton)`
+  background-color: ${Colors.lightRed};    
+  border: 1px solid ${Colors.lightRed};
+  color: ${Colors.white};
+
+  &:hover {
+    background-color: ${Colors.white};
+    border: 1px solid ${Colors.lightRed};
+    color: ${Colors.lightRed};
   }
 `
 

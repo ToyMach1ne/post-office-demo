@@ -17,7 +17,7 @@ const FormFieldText = ({ name, placeholder, label, type, tabIndex }: Props) => {
   const uuid = v4();
 
   return (
-    <FieldContainer>
+    <FieldContainer mb={"2.4rem"}>
       <InputContainer error={meta.touched && !!meta.error}>
         <TextLabel htmlFor={name + uuid}>{label}</TextLabel>
         <input

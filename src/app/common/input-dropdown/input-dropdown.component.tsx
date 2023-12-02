@@ -1,11 +1,12 @@
 import { useState } from "react";
-import { InputDropdownContainer } from "./input-dropdown.styles";
 import { ReactComponent as ArrowDownIcon } from "../../assets/arrow-down-mini-icon.svg";
 import { ReactComponent as ArrowUpIcon } from "../../assets/arrow-up-mini-icon.svg";
 import Dropdown, { Option } from 'react-dropdown';
 import { TextLabel } from "../typography/typography.styles";
+import { InputDropdownContainer } from "./input-dropdown.styles";
 
 interface Props {
+    name: string;
   items: Option[];
   label: string;
   selectedIndexDefault?: number;

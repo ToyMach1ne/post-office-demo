@@ -1,8 +1,13 @@
 import axios, { AxiosError, AxiosResponse } from "axios";
-// import { router } from "../../Router";
 import { store } from "../stores/store";
 import { AuthRequest } from "../models/authRequest";
-import { AuthResponse } from "../models/authResponse";
+import { ApiResponse } from "../models/apiResponse";
+import { PersonalDataValues } from "../models/personalDataValues";
+import { ContactDetailsValues } from "../models/contactDetailsValues";
+import {PreferencesDataValues} from "../models/preferencesDataValues";
+import { AddressDataValues } from "../models/addressDataValues";
+import { FirebaseMeta } from "../models/firebaseMeta";
+import { router } from "../../Router";
 
 export const sleep = (delayMs: number) => new Promise(resolve => setTimeout(resolve, delayMs));
 
@@ -16,32 +21,38 @@ axios.interceptors.request.use(config => {
 })
 
 axios.interceptors.response.use(async response => {
-  // await sleep(500);
+  // await sleep(3500);
   return response;
 }, (error: AxiosError) => {
-  const { data, status } = error.response as AxiosResponse;
-  console.error(error.response);
+  console.error(error);
+
+  // Error interception logic may be injected here in future.
+
+  const { status } = error.response as AxiosResponse;
+  // console.error(error.response);  
+  // store.commonStore.toastError(data.message);
 
   switch (status) {
     case 400:
-      alert('bad request: ' + data.message);
+      // alert('bad request: ' + data.message);
+      // store.commonStore.toastError(data.message);
       break;
     case 401:
-      alert('unauthorised: ' + data.message);
+      // alert('unauthorised: ' + data.message);
       break;
     case 403:
-      alert('forbidden: ' + data.message);
+      // alert('forbidden: ' + data.message);
       break;
     case 404:
       // router.navigate('/not-found');
-      alert('not found: ' + data.message)
+      // alert('not found: ' + data.message)
       break;
     case 422:
-      alert('validation error: ' + data.message);
+      // alert('validation error: ' + data.message);
       break;
     case 500:
-      //router.navigate('/server-error');
-      alert('server error: ' + data.message)
+      router.navigate('/server-error');
+      // alert('server error: ' + data.message)
       break;
   }
 
@@ -58,21 +69,35 @@ const requests = {
 }
 
 const Auth = {
-  login: (firebase_uid: string, firebase_token: string, device_uuid: string) => requests.post<AuthResponse>('/login', {firebase_uid, firebase_token, device_uuid} as AuthRequest)
+  login: (firebase_uid: string, firebase_token: string, device_uuid: string) => requests.post<ApiResponse>('/login', {firebase_uid, firebase_token, device_uuid} as AuthRequest)
     .then(authResponse => authResponse.data?.token),
-  socialLogin: (firebase_uid: string, firebase_token: string, device_uuid: string) => requests.post<AuthResponse>('/social-login', {firebase_uid, firebase_token, device_uuid} as AuthRequest)
+  socialLogin: (firebase_uid: string, firebase_token: string, device_uuid: string) => requests.post<ApiResponse>('/social-login', {firebase_uid, firebase_token, device_uuid} as AuthRequest)
     .then(authResponse => authResponse.data?.token),
-  register: (firebase_uid: string, device_uuid: string) => requests.post<AuthResponse>('/register', {firebase_uid, device_uuid} as AuthRequest),
-  logout: () => requests.post<AuthResponse>('/register',  {}),
+  register: (firebase_uid: string, device_uuid: string) => requests.post<ApiResponse>('/register', {firebase_uid, device_uuid} as AuthRequest),
+  logout: () => requests.post<ApiResponse>('/logout',  {}),
 }
 
 const Profile = {
-  profile: () => requests.get<AuthResponse>('/profile').then(authResponse => authResponse.data?.user)
+  profile: () => requests.get<ApiResponse>('/profile').then(authResponse => authResponse.data?.user),
+  updatePreferences: (preferences: PreferencesDataValues) => requests.post<ApiResponse>('/profile/update-user-location', preferences)
+    .then(authResponse => authResponse.data?.user),
+  updatePersonalData: (personalData: PersonalDataValues) => requests.post<ApiResponse>('/profile/update-personal-data', personalData)
+    .then(authResponse => authResponse.data?.user),
+  updateContactInfo: (contactInfo: ContactDetailsValues) => requests.post<ApiResponse>('/profile/update-contact-info', contactInfo)
+    .then(authResponse => authResponse.data?.user),
+  updateAddress: (addressInfo: AddressDataValues) => requests.post<ApiResponse>('/profile/update-user-address', addressInfo)
+    .then(authResponse => authResponse.data?.user),
+  deleteAccount: (firebaseMeta: FirebaseMeta) => requests.post<ApiResponse>('/profile/delete-user', firebaseMeta)
+}
+
+const Shipment = {
+  parcelDetails: () => requests.get<ApiResponse>('/shipment/create/parcel-details').then(response => response.data?.countries),
 }
 
 const agent = {
   Auth,
-  Profile
+  Profile,
+  Shipment
 }
 
 export default agent;

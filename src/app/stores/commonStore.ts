@@ -1,11 +1,21 @@
 import { makeAutoObservable, reaction, runInAction } from "mobx";
-import { AuthResponse } from "../models/authResponse";
+import { ApiResponse } from "../models/apiResponse";
+import { store } from "./store";
+import { v4 } from "uuid";
+import { router } from "../../Router";
+import { ToastOptions, toast } from "react-toastify";
+import { User } from "firebase/auth";
 
 export default class CommonStore {
-  serverError: AuthResponse | null = null;
+  serverError: ApiResponse | null = null;
   deviceUuid: string | null = localStorage.getItem('device_uuid');
   meestToken: string | null = localStorage.getItem('meest_token');
+  firebaseUser: User | null = null;
+  firebaseUuid: string | null = localStorage.getItem('firebase_uuid');
+  firebaseToken: string | null = localStorage.getItem('firebase_token');
   appLoaded: boolean = false;
+  toastInfoOptions: ToastOptions = { className: 'toastCustom' };
+  toastErrorOptions: ToastOptions = { className: 'toastErrorCustom' };
 
   // data of user which is currently being signed up (required for resending email)
   currentAuthData: {email: string; password: string | undefined} | null = null;
@@ -13,8 +23,6 @@ export default class CommonStore {
   constructor() {
     makeAutoObservable(this);
 
-    // reaction is only run when property jwtToken is changed.
-    // In comparison to autorun?? which is executed on store instance initialization
     reaction(
       () => this.deviceUuid, 
       deviceUuid => {
@@ -23,14 +31,51 @@ export default class CommonStore {
       });
 
     reaction(
+      () => this.firebaseUuid, 
+      firebaseUuid => {
+        if (firebaseUuid) localStorage.setItem('firebase_uuid', firebaseUuid);
+        else localStorage.removeItem('firebase_uuid');
+      });
+
+    reaction(
+      () => this.firebaseToken, 
+      firebaseToken => {
+        if (firebaseToken) localStorage.setItem('firebase_token', firebaseToken);
+        else localStorage.removeItem('firebase_uuid');
+      });
+
+    reaction(
       () => this.meestToken, 
-      token => {
-        if (token) localStorage.setItem('meest_token', token);
-        else localStorage.removeItem('meest_token');
+      async meestToken => {
+        if (meestToken) {
+          this.appLoaded = false;
+          localStorage.setItem('meest_token', meestToken);
+          await store.userStore.getCurrentUser();
+          runInAction(() => store.navStore.isSidebarOpened = false);
+          router.navigate("/");
+          this.setAppLoaded(true);
+        }
+        else {
+          localStorage.removeItem('meest_token');
+          runInAction(() => store.userStore.user = null);
+          router.navigate("/");
+        } 
       });
   }
 
-  setServerError = (error: AuthResponse) => {
+  get getDeviceUuid() {
+    if (!this.deviceUuid) {
+      runInAction(() => this.setDeviceUuid(v4()));
+    }
+
+    return this.deviceUuid!;
+  }
+
+  setFirebaseUser = (user: User | null) => {
+    this.firebaseUser = user;
+  }
+
+  setServerError = (error: ApiResponse) => {
     this.serverError = error;
   }
 
@@ -42,13 +87,27 @@ export default class CommonStore {
     this.meestToken = token;
   }
 
-  setAppLoaded = async () => {
-    runInAction(() => {
-      this.appLoaded = true;
-    })
+  setFirebaseUuid = (uuid: string | null) => {
+    this.firebaseUuid = uuid;
+  }
+
+  setFirebaseToken = (token: string | null) => {
+    this.firebaseToken = token;
+  }
+
+  setAppLoaded = async (loaded: boolean) => {
+    this.appLoaded = loaded;
   }
 
   setCurrentAuthData = (email: string, password?: string) => {
     this.currentAuthData = { email, password };
+  }
+
+  toastInfo = (message: string) => {
+    toast(message, this.toastInfoOptions);
+  }
+
+  toastError = (message: string) => {
+    toast.error(message, this.toastErrorOptions);
   }
 }

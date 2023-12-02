@@ -3,13 +3,15 @@ import { Colors, TextInput, TextInputPlaceholder, TextFormError, TextLabel } fro
 import errorIcon from "../../assets/error-icon.svg";
 import showPassIcon from "../../assets/pass-show-icon.svg";
 import hidePassIcon from "../../assets/pass-hide-icon.svg";
+import { BaseContainerWithMargins } from "../../../global.styles";
 
 interface FieldProps {
   error: boolean;
 }
+//margin-bottom: 2.4rem;
 
-export const FieldContainer = styled.div`
-  margin-bottom: 2.4rem;
+export const FieldContainer = styled(BaseContainerWithMargins)`
+  width: 100%;
 
   // input validation error message
   ${TextFormError} {

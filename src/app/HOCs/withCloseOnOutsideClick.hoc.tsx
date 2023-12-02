@@ -1,3 +1,4 @@
+import { observer } from "mobx-react-lite";
 import { forwardRef, useEffect, useRef, useState } from "react";
 
 export interface WithCloseOnOutsideClickProps {
@@ -9,7 +10,7 @@ const withCloseOnOutsideClick = (WrappedComponent: any) => {
   const WithCloseOnOutsideClick = (props: any, ref: any) => {
     const [isOpened, setIsOpened] = useState(false);
     const popupRef = useRef<HTMLDivElement>(null);
-  
+
     useEffect(() => {
       const handleOutsideClick = (event: MouseEvent) => {
         if (popupRef.current && !popupRef.current.contains(event.target as Node)) {
@@ -27,7 +28,7 @@ const withCloseOnOutsideClick = (WrappedComponent: any) => {
     return <WrappedComponent ref={popupRef} {...props} isOpened={isOpened} setIsOpened={setIsOpened}/>
   }
 
-  return forwardRef(WithCloseOnOutsideClick);
+  return observer(forwardRef(WithCloseOnOutsideClick));
 }
 
 export default withCloseOnOutsideClick;

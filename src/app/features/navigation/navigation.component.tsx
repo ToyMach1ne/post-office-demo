@@ -1,9 +1,9 @@
-import { LeftSide, LogoContainer, NavContent, NavigationContainer, RightSide, ServicesContainer } from "./navigation.styles";
+import { LeftSide, LogoContainer, NavContent, NavigationContainer, RightSide, NavServicesContainer } from "./navigation.styles";
 import { ReactComponent as MeestLogo } from "../../assets/meest-logo.svg";
 import { observer } from "mobx-react-lite";
-import Services from "./nav-services/services.component";
+import NavServices from "./nav-services/nav-services.component";
 import NavHelp from "./nav-help/nav-help.component";
-import NavLangPopup from "./nav-lang-popup/nav-lang.component";
+import NavLangPopup from "./nav-lang/nav-lang.component";
 import NavSignin from "./nav-signin-btn/nav-signin.component";
 import { useLocation } from "react-router-dom";
 import NavNotifications from "./nav-notifications/nav-notifications.components";
@@ -25,9 +25,9 @@ const Navigation = () => {
           <LogoContainer to="/">
             <MeestLogo />
           </LogoContainer>
-          <ServicesContainer>
-            <Services />
-          </ServicesContainer>
+          <NavServicesContainer>
+            <NavServices />
+          </NavServicesContainer>
         </LeftSide>
         <RightSide>
           <NavHelp />

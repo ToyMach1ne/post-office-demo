@@ -14,7 +14,16 @@ import {
   confirmEmailVerification,
   signInWithGooglePopup,
   signInWithApplePopup,
+  handleFirebaseError,
+  updatePasswordForUser,
 } from "../utils/firebase/firebase.utils";
+import { PersonalDataValues } from "../models/personalDataValues";
+import { ContactDetailsValues } from "../models/contactDetailsValues";
+import {PreferencesDataValues} from "../models/preferencesDataValues";
+import { FirebaseError } from "firebase/app";
+import { getCountryName } from "../common/form-field-phone/form-field-phone.component";
+import { AddressDataValues } from "../models/addressDataValues";
+import { AxiosError } from "axios";
 
 export default class UserStore {
   user: User | null = null;
@@ -30,6 +39,50 @@ export default class UserStore {
     makeAutoObservable(this);
   }
 
+  getInitials = () => {
+    let initials = "";
+
+    if (this.user?.first_name && this.user?.last_name) {
+      initials = this.user!.first_name.charAt(0) + this.user!.last_name.charAt(0);
+    } else {
+      initials = this.user!.email.slice(0, 2).toLocaleUpperCase();
+    }
+
+    return initials;
+  }
+
+  getAddress = () => {
+    let address: string = "";
+
+    if (this.user?.address?.building && this.user?.address?.building !== "") address += this.user!.address?.building;
+    if (this.user?.address?.street && this.user?.address?.building !== "") address += (address !== "" ? " " : "" ) + this.user!.address?.street;
+    if (this.user?.address?.apartment && this.user?.address?.building !== "") address += (address !== "" ? ", apt. " : "apt. " ) + this.user!.address?.apartment;
+
+    return address !== "" ? address : null;
+  }
+
+  getCountryName = () => {
+    let countryName: string | undefined = undefined;
+
+    if (this.user?.country) {
+      countryName = getCountryName(this.user.country);
+    }
+
+    return countryName;
+  }
+
+  getUserName = (includeMiddleName: boolean = false) => {
+    const fullName: (string | undefined | null)[] = [];
+
+    if (!this.user) return "";
+
+    fullName.push(this.user?.first_name);
+    if (includeMiddleName) fullName.push(this.user?.middle_name);
+    fullName.push(this.user?.last_name);
+
+    return fullName.filter(x => x).join(' ');
+  }
+
   googleLogin = async () => {
     this.googleSignInProgress = true;
     try {
@@ -42,20 +95,20 @@ export default class UserStore {
       const firebaseToken = (authUser.user as any).accessToken;
       const firebaseUid = authUser.user.uid;
 
+
       const meestToken = await agent.Auth.socialLogin(
         firebaseUid,
         firebaseToken,
-        store.commonStore.deviceUuid!, 
+        store.commonStore.getDeviceUuid, 
       );
 
       runInAction(() => {
-        store.commonStore.setMeestToken(meestToken ?? null);    
+        store.commonStore.setMeestToken(meestToken ?? null);
+        store.commonStore.setFirebaseUuid(firebaseUid ?? null);
+        store.commonStore.setFirebaseToken(firebaseToken ?? null);    
       })
-
-      //temp
-      alert(`User ${authUser.user.email} signed in successfully`);
     } catch (error) {
-      console.error(error);
+      handleError(error);
     } finally {
       runInAction(() => {
         this.googleSignInProgress = false;
@@ -78,17 +131,18 @@ export default class UserStore {
       const meestToken = await agent.Auth.socialLogin(
         firebaseUid,
         firebaseToken,
-        store.commonStore.deviceUuid!, 
+        store.commonStore.getDeviceUuid, 
       );
 
       runInAction(() => {
-        store.commonStore.setMeestToken(meestToken ?? null);    
+        runInAction(() => {
+          store.commonStore.setMeestToken(meestToken ?? null);
+          store.commonStore.setFirebaseUuid(firebaseUid ?? null);
+          store.commonStore.setFirebaseToken(firebaseToken ?? null);    
+        })    
       })
-
-      //temp
-      alert(`User ${authUser.user.email} signed in successfully`);
     } catch (error) {
-      console.error(error);
+      handleError(error);
     } finally {
       runInAction(() => {
         this.appleSignInProgress = false;
@@ -103,23 +157,21 @@ export default class UserStore {
       const authUser = await signInWithEmailAndPasswordAsync(email, password);
 
       if (!authUser.user.emailVerified) {
-        alert('Email not verified!');
         throw Error(`Email ${authUser.user.email} not verified`);
       }
 
       const firebaseToken = (authUser.user as any).accessToken;
       const firebaseUid = authUser.user.uid;
 
-      const meestToken = await agent.Auth.login(firebaseUid, firebaseToken, store.commonStore.deviceUuid!);
+      const meestToken = await agent.Auth.login(firebaseUid, firebaseToken, store.commonStore.getDeviceUuid);
 
       runInAction(() => {
-        store.commonStore.setMeestToken(meestToken ?? null);    
+        store.commonStore.setMeestToken(meestToken ?? null);
+        store.commonStore.setFirebaseUuid(firebaseUid ?? null);
+        store.commonStore.setFirebaseToken(firebaseToken ?? null);    
       })
-
-      //temp
-      alert(`User ${authUser.user.email} signed in successfully`);
     } catch (error) {
-      console.error(error);
+      handleError(error);
     } finally {
       runInAction(() => {
         this.emailSignInProgress = false;
@@ -135,18 +187,12 @@ export default class UserStore {
       const firebaseUid = authUser.user.uid;
       await sendEmailVerificationAsync();
 
-      runInAction(async () => {
-        const response = await agent.Auth.register(firebaseUid, store.commonStore.deviceUuid!);
-        console.log(response);
-      })
+      await agent.Auth.register(firebaseUid, store.commonStore.getDeviceUuid);
 
       store.navStore.toggleSignUpEmailSentShown();
       store.commonStore.setCurrentAuthData(email, password);
-
-      //temp
-      alert(`User ${authUser.user.email} signed up successfully`);
     } catch (error) {
-      console.error(error);
+      handleError(error);
     } finally {
       runInAction(() => {
         this.signUpInProgress = false;
@@ -160,7 +206,7 @@ export default class UserStore {
     try {
       await confirmEmailVerification(oobCode);
     } catch (error) {
-      console.error(error);
+      handleError(error);
     } finally {
       runInAction(() => {
         this.emailVerificationProgress = false;
@@ -179,7 +225,7 @@ export default class UserStore {
       store.navStore.togglePasswordResetEmailSentShown();
       store.commonStore.setCurrentAuthData(email);
     } catch (error) {
-      console.error(error);
+      handleError(error);
     } finally {
       runInAction(() => {
         this.passwordResetProgress = false;
@@ -194,7 +240,7 @@ export default class UserStore {
     try {
       await confirmPasswordResetAsync(oobCode, newPassword);
     } catch (error) {
-      console.error(error);
+      handleError(error);
     } finally {
       runInAction(() => {
         this.passwordResetProgress = false;
@@ -202,8 +248,18 @@ export default class UserStore {
     }
   }
 
-  changePassword = async (password: string) => {
-
+  changePassword = async (oldPassword: string, newPassword: string) => {
+    this.isLoadingUser = true;
+    
+    try {
+      await updatePasswordForUser(oldPassword, newPassword);
+    } catch (error) {
+      handleError(error);
+    } finally {
+      runInAction(() => {
+        this.isLoadingUser = false;
+      })
+    }
   }
 
   getCurrentUser = async () => {
@@ -215,14 +271,144 @@ export default class UserStore {
         this.user = user!;
       });
     } catch (error) {
-      console.error(error);
+      
+      if (store.commonStore.meestToken !== "" && error instanceof AxiosError && error.response?.status === 401) {
+        // ignore expired token error. Handled later in this catch
+      }
+      else {
+        handleError(error);
+      }
       // also set token to null. In such case it means that token is expired.
       store.commonStore.setMeestToken(null);
       store.commonStore.setDeviceUuid(null);
+      store.commonStore.setFirebaseToken(null);
+      store.commonStore.setFirebaseUuid(null);
     } finally {
       runInAction(() => {
         this.isLoadingUser = false;
       })
     }
+  }
+
+
+  // Updates first_name, last_name and middle_name for currently logged in user.
+  updatePersonalData = async (personalData: PersonalDataValues) => {
+    if (!this.user) return;
+    
+    this.isLoadingUser = true;
+    try {
+      const updatedUser = await agent.Profile.updatePersonalData(personalData);
+
+      runInAction(() => {
+        this.user! = updatedUser!;
+      });
+    } catch (error) {
+      handleError(error);
+    } finally {
+      runInAction(() => {
+        this.isLoadingUser = false;
+      })
+    }
+  }
+
+  // Updates user localization settings
+  updatePreferences = async (preferences: PreferencesDataValues) => {
+    console.log(preferences);
+    if (!this.user) return;
+
+    this.isLoadingUser = true;
+    try {
+      const updatedUser = await agent.Profile.updatePreferences(preferences);
+
+      runInAction(() => {
+        this.user! = updatedUser!;
+      });
+    } catch (error) {
+      handleError(error);
+    } finally {
+      runInAction(() => {
+        this.isLoadingUser = false;
+      })
+    }
+  }
+
+  updateContactInfo = async (contactDetails: ContactDetailsValues) => {
+    if (!this.user) return;
+    
+    this.isLoadingUser = true;
+    try {
+      const updatedUser = await agent.Profile.updateContactInfo(contactDetails);
+
+      runInAction(() => {
+        this.user! = updatedUser!;
+      });
+    } catch (error) {
+      handleError(error);
+    } finally {
+      runInAction(() => {
+        this.isLoadingUser = false;
+      })
+    }
+  }
+
+  updateAddress = async (addressInfo: AddressDataValues) => {
+    if (!this.user) return;
+    
+    this.isLoadingUser = true;
+    try {
+      const updatedUser = await agent.Profile.updateAddress(addressInfo);
+
+      runInAction(() => {
+        this.user! = updatedUser!;
+      });
+    } catch (error) {
+      handleError(error);
+    } finally {
+      runInAction(() => {
+        this.isLoadingUser = false;
+      })
+    }
+  }
+
+  logout = async (isDeleted = false) => {
+    store.commonStore.appLoaded = false;
+    try {
+      await agent.Auth.logout();
+    } catch (error) {
+      if (!isDeleted) {
+        handleError(error);
+      }
+    } finally {
+      runInAction(() => {
+        store.commonStore.setMeestToken(null);
+        store.commonStore.setDeviceUuid(null);
+        store.commonStore.setFirebaseToken(null);
+        store.commonStore.setFirebaseUuid(null);
+        store.commonStore.appLoaded = true;
+      })
+    }
+  }
+
+  deleteAccount = ( firebaseMeta: any ) => {
+    if (!this.user) return;
+    this.isLoadingUser = true;
+    try {
+      agent.Profile.deleteAccount({firebase_uid: firebaseMeta.firebaseUuid, firebase_token: firebaseMeta.firebaseToken})
+          .then(() => this.logout(true));
+    } catch (error) {
+      console.log(error);
+    }
+  }
+}
+
+export function handleError(error: any) {
+  console.error(error);
+
+  if (error instanceof AxiosError && error.response?.status !== 500) {
+    store.commonStore.toastError(error.response?.data.message);
+  } else if (error instanceof FirebaseError) {
+    handleFirebaseError(error);
+  } else {
+    store.commonStore.toastError(error as string);
   }
 }

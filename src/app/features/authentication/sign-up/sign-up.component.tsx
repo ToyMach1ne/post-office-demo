@@ -26,7 +26,7 @@ const SignUp = () => {
       .required('Email is required.'),
 
     password: Yup.string()
-      .matches(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@$!%*#?&])(?!.*\s).{8,30}$/, 'Password is incorrect')
+      .matches(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@$!%*#?&-])(?!.*\s).{8,30}$/, 'Password is incorrect')
       .required('Password is required'),
 
     confirmPassword: Yup.string().test('passwords-match', 'Passwords must match', function (value) {

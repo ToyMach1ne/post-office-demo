@@ -1,7 +1,7 @@
 import { useField } from "formik";
 import { Link, TextFormError, TextLabel } from "../typography/typography.styles";
 import { InputContainer, IconsContainer, PassVisibilityIcon } from "../form-field-text/form-field-text.styles";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import PasswordValidator from "../password-validator/password-validator.component";
 import { FieldPasswordContainer } from "./form-field-password.styles";
 import { v4 } from "uuid";
@@ -25,7 +25,7 @@ const ValidatePassword = (password: string) => {
   if (!password.match(/(?=.*\d)/)) validationErrorIndexes.push(1);
   if (!password.match(/(?=.*[a-z])/)) validationErrorIndexes.push(2);
   if (!password.match(/(?=.*[A-Z])/)) validationErrorIndexes.push(3);
-  if (!password.match(/(?=.*[@$!%*#?&])/)) validationErrorIndexes.push(4);
+  if (!password.match(/(?=.*[@$!%*#?&-])/)) validationErrorIndexes.push(4);
   if (!password.match(/^\S*$/)) validationErrorIndexes.push(5);
 
   return validationErrorIndexes;
@@ -34,6 +34,7 @@ const ValidatePassword = (password: string) => {
 const FormFieldPassword = ({ name, placeholder, label, tabIndex, shouldValidatePassword, forgotPassword }: Props) => {
   const [field, meta] = useField(name);
   const [isPassShown, setPassShown] = useState(false);
+  const inputRef = useRef<HTMLInputElement>(null);
   const { navStore: { togglePasswordResetFormShown } } = useStore();
   const { t } = useTranslation();
 
@@ -43,6 +44,15 @@ const FormFieldPassword = ({ name, placeholder, label, tabIndex, shouldValidateP
   if (isPassShown) {
     inputTypeToDisplay = 'text';
   }
+
+  // When show/hide password - return focus to pass input and move cursor to the end
+  useEffect(() => {
+    if (inputRef && inputRef.current && inputRef.current.value.length > 0) {
+      inputRef && inputRef.current?.focus() 
+      inputRef.current.selectionStart = inputRef.current.value.length;
+      inputRef.current.selectionEnd = inputRef.current.value.length;
+    }
+  }, [isPassShown])
 
   let validationErrorIndexes: number[] = [];
 
@@ -58,12 +68,17 @@ const FormFieldPassword = ({ name, placeholder, label, tabIndex, shouldValidateP
     togglePasswordResetFormShown();
   }
 
+  function hadnleShowPasswordClick() {
+    setPassShown(!isPassShown);
+  }
+
   return (
-    <FieldPasswordContainer>
+    <FieldPasswordContainer mb={"2.4rem"}>
       <InputContainer error={meta.touched && !!meta.error}>
         <TextLabel htmlFor={name + uuid}>{label}</TextLabel>
         {forgotPassword && <Link onClick={(e) => handlePassResetClick(e)} href={""}>{t("Forgot your password?")}</Link>}
         <input
+          ref={inputRef}
           tabIndex={tabIndex ?? -1}
           type={inputTypeToDisplay}
           id={name + uuid}
@@ -73,7 +88,7 @@ const FormFieldPassword = ({ name, placeholder, label, tabIndex, shouldValidateP
           formNoValidate={true}
         />
         <IconsContainer>
-          {<PassVisibilityIcon onClick={() => setPassShown(!isPassShown)} type={isPassShown ? 'hide' : 'show'} />}
+          {<PassVisibilityIcon onClick={() => hadnleShowPasswordClick()} type={isPassShown ? 'hide' : 'show'} />}
         </IconsContainer>
       </InputContainer>
       {(field.value.length === 0 || !shouldValidatePassword) && meta.touched && !!meta.error &&

@@ -4,6 +4,8 @@ import NavStore from "./navStore";
 import CommonStore from "./commonStore";
 import NotificationsStore from "./notificationsStore";
 import LocalizationsStore from "./localizationsStore";
+import PlacesSearchStore from "./placesSearchStore";
+import ParcelCreationFlowStore from "./parcelCreationFlowStore";
 
 interface Store {
   userStore: UserStore;
@@ -11,6 +13,8 @@ interface Store {
   commonStore: CommonStore;
   notificationsStore: NotificationsStore;
   localizationsStore: LocalizationsStore;
+  placesSearchStore: PlacesSearchStore;
+  parcelCreationStore: ParcelCreationFlowStore;
 }
 
 export const store: Store = {
@@ -18,7 +22,9 @@ export const store: Store = {
   navStore: new NavStore(),
   commonStore: new CommonStore(),
   notificationsStore: new NotificationsStore(),
-  localizationsStore: new LocalizationsStore()
+  localizationsStore: new LocalizationsStore(),
+  placesSearchStore: new PlacesSearchStore(),
+  parcelCreationStore: new ParcelCreationFlowStore()
 }
 
 export const StoreContext = createContext(store);

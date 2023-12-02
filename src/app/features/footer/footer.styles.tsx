@@ -3,11 +3,9 @@ import { Colors, FontSizes, HeaderTertiary, LinkFooter } from "../../common/typo
 import { InputDropdownContainer } from "../../common/input-dropdown/input-dropdown.styles";
 
 export const FooterContainer = styled.div`
-  position: absolute;
-  bottom: -36.5rem;
+  margin-top: 5rem;
   width: 100%;
-  background-color: ${Colors.grayLight6};
-  overflow: scroll;
+  background-color: ${Colors.grayLight5};
 
   ${InputDropdownContainer} {
     margin-bottom: 1.2rem;

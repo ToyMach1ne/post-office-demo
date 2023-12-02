@@ -1,5 +1,5 @@
 import { ReactComponent as HelpIcon } from "../../../assets/questionmark-icon.svg";
-import { NavBtn } from "../../../common/nav-btn/nav-btn.styles";
+import { NavBtn } from "../nav-btn/nav-btn.styles";
 import { HelpNavButton } from "./nav-help.styles";
 
 const NavHelp = () => {

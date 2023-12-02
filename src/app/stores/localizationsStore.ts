@@ -6,17 +6,44 @@ interface Language {
   code: string;
 }
 
+interface localizationAttribute {
+  value: string;
+  label: string;
+}
+
 export default class LocalizationsStore {
+
+  availableCountries: localizationAttribute[] = [
+    {value: 'US', label: 'USA'},
+    {value: 'CA', label: 'Canada'},
+    {value: 'UK', label: 'Ukraine'}];
 
   availableLocalizations: Language[] = [
   {code: "en", languageLabel: "English"},
   {code: "uk", languageLabel: "Ukrainian"},
-  {code: "de", languageLabel: "German"}];
+  {code: "ru", languageLabel: "Russian"}];
+
+  availableCurrencies: localizationAttribute[] = [
+    {value: "USD", label: "USD"},
+    {value: "CAD", label: "CAD"},
+    {value: "UAH", label: "UAH"}];
 
   selectedLocalizationIndex: number = 0;
 
   get selectedLocalization() {
     return this.availableLocalizations[this.selectedLocalizationIndex];
+  }
+
+  getAvailableCountries() {
+    return this.availableCountries;
+  }
+
+  getAvailableLocalizations() {
+    return this.availableLocalizations;
+  }
+
+  getAvailableCurrencies() {
+    return this.availableCurrencies;
   }
 
   constructor() {

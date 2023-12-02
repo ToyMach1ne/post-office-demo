@@ -5,11 +5,12 @@ import { Colors } from "../../common/typography/typography.styles";
 
 export const NavigationContainer = styled.div`
   width: 100%;
-  background-color: ${Colors.grayLight6};
+  background-color: ${Colors.white};
   padding: 8px 0;
 `;
 
 export const NavContent = styled.div`
+  position: relative;
   max-width: 144rem;
   padding: 0 1.6rem;
   display: flex;
@@ -29,7 +30,7 @@ export const LogoContainer = styled(Link)`
   justify-content: center;
 `;
 
-export const ServicesContainer = styled.div`
+export const NavServicesContainer = styled.div`
   padding-left: 1.6rem;
   border-left: 1px solid ${Colors.gray2};
   display: flex;

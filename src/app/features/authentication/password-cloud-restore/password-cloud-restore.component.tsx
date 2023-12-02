@@ -29,12 +29,7 @@ const CloudPasswordRestore = ({ oobCode }: Params) => {
   })
 
   const handleFormSubmit = async (formValues: any, formikHelpers: FormikHelpers<any>) => {
-    try {
-      await resetPasswordFinish(oobCode, formValues.password);
-    } catch (error) {
-      alert(error);
-      console.error(error);
-    }
+    await resetPasswordFinish(oobCode, formValues.password);
     formikHelpers.resetForm();
     setPasswordResetIsDone(true);
   }

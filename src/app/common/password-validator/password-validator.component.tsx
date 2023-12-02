@@ -10,7 +10,7 @@ const errorMessages = [
   "At least 1 digit",
   "At least 1 lowercase letter",
   "At least 1 uppercase letter",
-  "At least 1 of [@$!%*#?&]",
+  "At least 1 of [@$!%*#?&-]",
   "No whitespaces"
 ];
 

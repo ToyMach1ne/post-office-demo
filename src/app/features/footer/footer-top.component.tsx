@@ -1,3 +1,4 @@
+
 import InputDropdown from "../../common/input-dropdown/input-dropdown.component";
 import { HeaderTertiary, LinkFooter } from "../../common/typography/typography.styles";
 import { FooterColumn, FooterTopContainer } from "./footer.styles";
@@ -50,10 +51,12 @@ const FooterTop = () => {
 
       <FooterColumn>
         <HeaderTertiary>Location</HeaderTertiary>
-        <InputDropdown label={"Change country"} items={[
-          {value: "Canada", label: "🇨🇦 Canada"}, 
-          {value: "USA", label: "🇺🇸 USA"}, 
-          {value: "Ukraine", label: "🇺🇦 Ukraine"}
+        <InputDropdown label={"Change country"}
+                       name="country"
+          items={[
+            {value: "Canada", label: "🇨🇦 Canada"}, 
+            {value: "USA", label: "🇺🇸 USA"}, 
+            {value: "Ukraine", label: "🇺🇦 Ukraine"}
         ]}/>
         <LinkFooter href="">FAQ</LinkFooter>
         <LinkFooter href="">Pricing</LinkFooter>

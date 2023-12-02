@@ -5,6 +5,7 @@ enum FontSizes {
   normal = '1.4rem',
   medium = '1.6rem',
   medimPlus = '1.8rem',
+  mediumBig = '2.4rem',
   big = '2.8rem',
 }
 
@@ -14,11 +15,13 @@ enum Colors {
   blue3 = '#0061AF', // links
   blue4 = '#008CFF', // checbox checked,
   blueLight3 = '#B3DDFF',
+  blueLight4 = '#F4F7FC',
   blueDisabled = '#C1DBF0', // disabled button
   gray = '#5A6673', // normal text
   gray2 = '#75777B', // tab title, checkbox unchecked border
   gray3 = '#96999E', // nav text, nav btn active
   gray4 = '#B7B9BD', // nav btn hover
+  gray5 = '#B7B9BD', // Parcle step title inactive
   grayLight = '#7B8085', // label text, checkbox descr. text
   grayLight2 = '#96999E', // nav icons
   grayLight3 = '#DCDDE0', // input borders
@@ -28,9 +31,13 @@ enum Colors {
   grayDark = '#334150', // headings
   grayDark2 = '#2C363F', // text in inputs, sidebar title, footer header3
   grayDark3 = '#2C2C2C', // text copyright
+  grayDark4 = '#3C3C434D',
   white = '#FFFFFF',
   red = '#ED5576',
+  redTransparent = '#ed5576e2',
+  lightRed = '#FE6975',
   green = '#57C278',
+  greenTransparent = '#68c886e3',
   yellow = '#FFCB45'
 }
 
@@ -62,6 +69,14 @@ const HeaderTertiary = styled.h3<Header3Props>`
   color: ${({ color }) => color ? Colors.gray2 : Colors.grayDark2}
 `;
 
+const HeaderFourth = styled.h3<Header3Props>`
+  font-size: ${FontSizes.mediumBig};
+  font-weight: 700;
+  line-height: 2.4rem;
+  letter-spacing: .5px;
+  color: ${({ color }) => color ? Colors.gray2 : Colors.grayDark2}
+`;
+
 const TextBody = styled.p`
   font-size: ${FontSizes.normal};
   font-weight: 500;
@@ -86,6 +101,14 @@ const TextInput = css`
 const TextButton = css`
   font-size: ${FontSizes.medium};
   font-weight: 700;
+  line-height: 2rem;
+  letter-spacing: .5px;
+  color: ${Colors.white};
+`
+
+const TextButtonThin = css`
+  font-size: ${FontSizes.normal};
+  font-weight: 500;
   line-height: 2rem;
   letter-spacing: .5px;
   color: ${Colors.white};
@@ -121,6 +144,13 @@ const TextFormError = styled.span`
   color: ${Colors.red};
 `
 
+const TextSearchOption = styled.span`
+  font-size: ${FontSizes.medium};
+  font-weight: 400;
+  line-height: 2.4rem;
+  color: ${Colors.grayDark2};
+`
+
 interface CaptionProps {
   color?: 'red' | 'green';
 }
@@ -149,11 +179,45 @@ const TextMenu = styled.span<TextMenuProps>`
 
 const TextNavMenu = styled.span`
   font-size: ${FontSizes.normal};
-  font-style: normal;
   font-weight: 500;
   line-height: 2rem; /* 142.857% */
   letter-spacing: 0.5px;
   color: ${Colors.gray2};
+`
+
+interface TextServicesMenuProps {
+  color?: 'gray' | 'red';
+}
+
+const TextServicesMenu = styled.span<TextServicesMenuProps>`
+  font-size: ${FontSizes.normal};
+  font-weight: 500;
+  line-height: 2rem; /* 142.857% */
+  letter-spacing: 0.5px;
+  color: ${({color}) => color && color === 'red' ? Colors.red : Colors.grayDark2};
+  white-space: nowrap;
+`
+
+interface TextServicesDataProps {
+  type: 'label' | 'data';
+}
+
+const TextServicesData = styled.span<TextServicesDataProps>`
+  ${({type}) => type === 'label' ? css`font-size: ${FontSizes.normal};` : css`font-size: ${FontSizes.medimPlus};`}
+  font-weight: 500;
+  line-height: 2rem;
+  letter-spacing: 0.5px;
+  
+  ${({type}) => type === 'label' ? css`color: ${Colors.gray2};` : css`color: ${Colors.grayDark2};`}
+`
+
+const TextServicesContact = styled.span`
+  font-size: ${FontSizes.small};
+  font-weight: 500;
+  line-height: 1.6rem;
+  letter-spacing: 0.5px;
+  color: ${Colors.gray2};
+  display: block;
 `
 
 const TextCopyright = styled.span`
@@ -162,6 +226,20 @@ const TextCopyright = styled.span`
   line-height: 1.6rem;
   letter-spacing: .5px;
   color: ${Colors.grayDark3};
+`
+
+const TextToastMessage = css`
+  font-size: ${FontSizes.medium};
+  font-weight: 300;
+  color: ${Colors.grayLight6};
+  line-height: 2rem;
+`
+
+const TextToastErrorMessage = css`
+  font-size: ${FontSizes.normal};
+  font-weight: 300;
+  color: ${Colors.grayLight6};
+  line-height: 2rem;
 `
 
 interface LinkProps {
@@ -232,6 +310,7 @@ export {
   HeaderMain,
   HeaderSecondary,
   HeaderTertiary,
+  HeaderFourth,
   TextBody,
   TextLabel,
   TextCheckbox,
@@ -241,9 +320,16 @@ export {
   TextValidation,
   TextPopup,
   TextButton,
+  TextButtonThin,
   TextMenu,
   TextNavMenu,
+  TextServicesMenu,
+  TextServicesContact,
+  TextServicesData,
   TextCopyright,
+  TextSearchOption,
+  TextToastMessage,
+  TextToastErrorMessage,
   Link,
   LinkSmall,
   LinkFooter,

@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { NavBtn } from "../../../common/nav-btn/nav-btn.styles";
+import { NavBtn } from "../nav-btn/nav-btn.styles";
 
 export const SignInNavButton  = styled.span`
   display: flex;

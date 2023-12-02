@@ -1,33 +1,33 @@
 export interface User {
-  id: number
-  first_name: any
-  last_name: any
-  middle_name: any
-  organization: any
-  customer_code: any
-  type: number
-  status: number
-  email: string
-  phone: any
-  firebase_uid: string
-  birthday_at: any
-  itn: any
-  pass_country: any
-  pass_series: any
-  pass_number: any
-  pass_issued_at: any
-  pass_issued_by: any
-  gender: any
-  erp_id: number
-  locale: any
-  country: any
-  lang: string
-  measures: any
-  lat: any
-  lon: any
-  last_ip: any
-  last_access: any
-  created_at: string
-  updated_at: string
-  currency: any
+  id: number;
+  first_name: string;
+  last_name: string;
+  middle_name: string;
+  email: string;
+  phone: Phone;
+  firebase_uid: string;
+  locale?: any;
+  lang: string;
+  country: string;
+  currency: string;
+  measures: number;
+  address: Address;
+  created_at: string;
+  updated_at: string;
+}
+export interface Address {
+  full_address?: any;
+  post_code: string;
+  region: string;
+  city: string;
+  street: string;
+  building: string;
+  section?: any;
+  apartment: string;
+  buzz_code?: any;
+  note?: any;
+}
+export interface Phone {
+  country_code: string;
+  phone_number: string;
 }

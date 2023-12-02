@@ -5,11 +5,11 @@ interface PopupProps {
   isOpened?: boolean;
 }
 
-export const NavPopup = styled.div<PopupProps>`
+export const NavPopupContainer = styled.div<PopupProps>`
   ${({isOpened}) => isOpened ? css`display: block;` : css`display: none;`}
   position: absolute;
   top: 3.5rem;
-  left: -5.5rem;
+  right: 0;
   font-size: ${FontSizes.small};
   font-style: normal;
   font-weight: 500;
@@ -19,7 +19,6 @@ export const NavPopup = styled.div<PopupProps>`
   background-color: white;
   border: 1px solid #ccc;
   border-radius: 10px;
-  padding: 8px;
   box-shadow: 0 1px 0 rgba(0, 0, 0, 0.06);
   box-sizing: border-box;
   z-index: 1000;
@@ -44,5 +43,9 @@ export const NavPopupItem = styled.div<ItemProps>`
   &:hover {
     background-color: ${Colors.grayLight6};
     border-radius: 6px;
+  }
+
+  &:active {
+    background-color: ${Colors.grayLight5};
   }
 `
