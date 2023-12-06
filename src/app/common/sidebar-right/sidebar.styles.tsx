@@ -67,12 +67,15 @@ export const SidebarButtonClose = styled.span`
   margin-right: 2.4rem;
   line-height: 0;
   cursor: pointer;
+  svg path {
+    fill: ${Colors.grayLight2};
+  }
 
   & svg path {
     transition: fill .2s;
   }
   
   &:hover svg path {
-    fill: ${Colors.grayLight2};
+    fill: ${Colors.gray2};
   }
 `

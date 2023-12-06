@@ -21,12 +21,13 @@ const ParcelDetailsDeparture = () => {
         <InputSearchWithSidebar<ShipmentCountryInfo>
           name="Country search" 
           inputValue={getShipmentCountryName(countryDeparture)}
-          placeholder="Choose country"
+          placeholder=""
           label="Country"
           sidebarTitle="Country"
           sidebarInputPlaceholder="Start typing country name"
           tabIndex={1}
           displayAllOptionsWithEmptyFilter
+          isOptionsEqual={(a, b) => a?.countryCode === b?.countryCode}
           getSearchOptions={(filter) => Promise.resolve(getShipmentCountriesByFilter(shipmentCountries, filter))}
           onSearchOptionSelected={(country) => { setDepartureShipmentCountry(country); setDestinationShipmentCountry(null); }}
           getKeyForSearchOption={(country) => country.countryCode}

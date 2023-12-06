@@ -2,6 +2,7 @@ import styled, { css } from "styled-components";
 import { Colors, TextButton, TextButtonThin } from "../typography/typography.styles";
 import { SpinnerCircle } from "../spinner/spinner.styles";
 import { ComponentPropsWithoutRef } from "react";
+import { BaseMarginComponent } from "../../../global.styles";
 
 interface Props extends ComponentPropsWithoutRef<"button"> {
   disabled?: boolean;
@@ -9,7 +10,7 @@ interface Props extends ComponentPropsWithoutRef<"button"> {
   contentStyle?: 'normal' | 'thin';
 }
 
-export const BaseButton = styled.button<Props>`
+export const BaseButton = styled(BaseMarginComponent('button'))<Props>`
   display: flex;
   justify-content: center;
   align-items: center;
@@ -39,6 +40,8 @@ export const BaseButton = styled.button<Props>`
 
   &:active {
     background-color: ${Colors.blue};
+    outline: none;
+    box-shadow: none;
   }
 
   ${({ disabled }) => disabled &&

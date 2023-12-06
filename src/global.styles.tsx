@@ -1,4 +1,4 @@
-import styled, { createGlobalStyle, css } from "styled-components";
+import styled, { StyledComponent, createGlobalStyle, css } from "styled-components";
 import { Colors } from './app/common/typography/typography.styles';
 import { MediaQueries } from './media-queries.styles';
 
@@ -27,28 +27,33 @@ export const GlobalStyles = createGlobalStyle`
   ${MediaQueries};
 `;
 
-interface Props {
+export interface MarginProps {
   mr?: string;
   ml?: string;
   mt?: string;
   mb?: string;
 }
 
-export const BaseContainerWithMargins = styled.div<Props>`
-  ${({mr}) => mr && css`
-      margin-right: ${mr};
-  `}
+// Generic function to generate a base styled component for any HTML element
+export const BaseMarginComponent = <T extends keyof JSX.IntrinsicElements>(
+  tagName: T
+): StyledComponent<T, any, MarginProps, never> => {
+  return styled(tagName)<MarginProps>`
+      ${({mr}) => mr && css`
+        margin-right: ${mr};
+      `}
 
-  ${({ml}) => ml && css`
-      margin-left: ${ml};
-  `}
+      ${({ml}) => ml && css`
+        margin-left: ${ml};
+      `}
 
-  ${({mt}) => mt && css`
-      margin-top: ${mt};
-  `}
+      ${({mt}) => mt && css`
+        margin-top: ${mt};
+      `}
 
-  ${({mb}) => mb && css`
-      margin-bottom: ${mb};
-  `}
-`
+      ${({mb}) => mb && css`
+        margin-bottom: ${mb};
+      `}
+  `;
+};
 

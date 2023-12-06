@@ -1,5 +1,7 @@
 import { makeAutoObservable } from "mobx";
 import i18n from "../../i18n";
+import {countryInfoList} from "../assets/data/countryInfo";
+import {CountryListItem} from "../models/countryListItem";
 
 interface Language {
   languageLabel: string;
@@ -13,10 +15,7 @@ interface localizationAttribute {
 
 export default class LocalizationsStore {
 
-  availableCountries: localizationAttribute[] = [
-    {value: 'US', label: 'USA'},
-    {value: 'CA', label: 'Canada'},
-    {value: 'UK', label: 'Ukraine'}];
+  availableCountries: CountryListItem[] = countryInfoList;
 
   availableLocalizations: Language[] = [
   {code: "en", languageLabel: "English"},
@@ -32,10 +31,6 @@ export default class LocalizationsStore {
 
   get selectedLocalization() {
     return this.availableLocalizations[this.selectedLocalizationIndex];
-  }
-
-  getAvailableCountries() {
-    return this.availableCountries;
   }
 
   getAvailableLocalizations() {

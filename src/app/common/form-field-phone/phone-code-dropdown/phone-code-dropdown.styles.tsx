@@ -1,5 +1,6 @@
 import styled, {css} from "styled-components";
 import { Colors, FontSizes, TextLabel } from "../../typography/typography.styles";
+import checkMarkIcon from "../../../assets/checked-mark-icon.svg";
 
 interface Props {
   isOpened: boolean;
@@ -55,6 +56,7 @@ export const DropdownPopup = styled.span<PopupProps>`
 
 interface OptionProps {
   isSelected?: boolean;
+  displayCheckMarkForSelected?: boolean;
 }
 
 export const DropdownOption = styled.span<OptionProps>`
@@ -66,6 +68,7 @@ export const DropdownOption = styled.span<OptionProps>`
   font-size: ${FontSizes.medium};
   line-height: 2.4rem;
   cursor: pointer;
+  position: relative;
 
   &:hover {
     background-color: ${Colors.grayLight6};
@@ -76,7 +79,29 @@ export const DropdownOption = styled.span<OptionProps>`
     background-color: ${Colors.grayLight5};
   }
 
-  ${({isSelected}) => isSelected ? css`color: ${Colors.blue2};` : css`color: ${Colors.grayDark2};`}
+  ${({isSelected}) => isSelected 
+    ? css`color: ${Colors.blue2};
+          background-color: ${Colors.grayLight6};
+          border-radius: 6px;
+        ` 
+    : css`color: ${Colors.grayDark2};`}
+
+
+  ${({isSelected, displayCheckMarkForSelected}) => isSelected && displayCheckMarkForSelected && 
+      css`&::after {
+            content: ''; /* Required content property for ::after */
+            position: absolute;
+            top: 50%;
+            right: 1.2rem;
+            transform: translateY(-50%);
+            width: 1.6rem; /* Adjust width and height as needed */
+            height: 1.6rem;
+            background-image: url(${checkMarkIcon}); /* Replace with your icon image path */
+            background-size: contain; /* Adjust to fit the icon size */
+            background-repeat: no-repeat;
+          }
+        `
+  }
 `
 
 export const DropdownSelectedOption = styled.span`

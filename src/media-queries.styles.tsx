@@ -17,8 +17,14 @@ import { ServicesRouteContainer, ServicesRouteMobile } from "./app/routes/servic
 import { SecuritySettingsContainer } from "./app/routes/security-settings/security-settings.styles";
 import { StatusPageButtonsContainer, StatusPageCenteredContent } from "./app/common/status-page/status-page.styles";
 import { ParcelDetailsSeachInputsContainer } from "./app/routes/parcel-details/parcel-details.styles";
+import { ParcelStepRightContainer } from "./app/features/parcel-creation/parcel-step-right-container/parcel-step-right-container.styles";
+import { ParcelStepLeftContainer } from "./app/features/parcel-creation/parcel-step-left-container/parcel-step-left-container.styles";
 
 export const MediaQueries = css`
+
+  #parcelProgressMobile {
+    display: none;
+  }
   
   @media (max-height: 1024px) {
     ${ServicesContainer} {
@@ -194,6 +200,18 @@ export const MediaQueries = css`
       ${StatusPageButtonsContainer} {
         padding: 0 3rem;
       }
+    }
+
+    ${ParcelStepRightContainer} {
+      display: none;
+    }
+
+    ${ParcelStepLeftContainer} {
+      margin-top: 5rem;
+    }
+
+    #parcelProgressMobile {
+      display: flex;
     }
   }
 

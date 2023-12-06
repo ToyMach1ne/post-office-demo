@@ -404,7 +404,12 @@ export default class UserStore {
 export function handleError(error: any) {
   console.error(error);
 
-  if (error instanceof AxiosError && error.response?.status !== 500) {
+  if (store.commonStore.meestToken !== "" && error instanceof AxiosError && error.response?.status === 401) {
+    store.commonStore.setMeestToken(null);
+    store.commonStore.setDeviceUuid(null);
+    store.commonStore.setFirebaseToken(null);
+    store.commonStore.setFirebaseUuid(null);
+  } else if (error instanceof AxiosError && error.response?.status !== 500) {
     store.commonStore.toastError(error.response?.data.message);
   } else if (error instanceof FirebaseError) {
     handleFirebaseError(error);

@@ -4,7 +4,7 @@ import { ServicesSubSectionContainer } from "../../features/services/services-su
 import { FieldContainer } from "../../common/form-field-text/form-field-text.styles";
 
 export const PersonalDataContainer = styled(ServicePageContainer)`
-  ${ServicesSubSectionContainer}:nth-child(3) {
+  ${ServicesSubSectionContainer}:nth-child(4) {
     form .inputs {
       display: grid;
       grid-template-columns: repeat(6, 1fr); /* 3 columns for the 1st and 4th rows */
@@ -47,6 +47,29 @@ export const PersonalDataContainer = styled(ServicePageContainer)`
 
       div:nth-child(8) {
         grid-column: 5 / span 2;
+      }
+    }
+  }
+  .ant-form-item-label, .ant-select, .ant-radio-wrapper, .ant-radio, .ant-select-selector {
+    font-family: Montserrat, "Open Sans", sans-serif !important;
+    border-radius: 10px !important;
+  }
+  
+  .location-inputs {
+    display: flex;
+    & > * {
+      width: 100%;
+      margin-right: 1.4rem;
+    }
+    & > *:last-of-type {
+      margin-right: 0;
+    }
+  }
+  
+  @media(max-width: 750px) {
+    form {
+      .location-inputs {
+        flex-direction: column;
       }
     }
   }

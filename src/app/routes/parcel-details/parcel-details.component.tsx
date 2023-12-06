@@ -20,7 +20,6 @@ const ParcelDetails = () => {
       <ParcelDetailsDeparture />
       <ParcelDetailsDestination />
     </>
-    
   )
 }
 

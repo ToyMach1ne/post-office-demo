@@ -7,7 +7,7 @@ interface Props {
 const Separator = ({ content }: Props) => {
   return (
     <SeparatorContainer>
-      <SeparatorLine />
+      <SeparatorLine width={!content ? "100%" : undefined} />
       {content && (<>{content}<SeparatorLine /></>)}
     </SeparatorContainer>
   )

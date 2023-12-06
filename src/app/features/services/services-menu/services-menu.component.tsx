@@ -17,7 +17,7 @@ export const menuItems: AccordionSectionData[] = [
   },  
   {
     title: "Account Settings",
-    items: ["Personal data", "Preferences", "Security settings", "Payment details", "My receivers"]
+    items: ["Personal data", "Security settings", "Payment details", "My receivers"]
   },
   { 
     title: "PUDO",
@@ -30,8 +30,15 @@ export const menuItems: AccordionSectionData[] = [
 ];
 
 const ServicesMenu = () => {
-  const { userStore: { user, logout } } = useStore();
+  const { userStore: { user, logout }, navStore: { isLeftSidebarOpened, toggleLeftSidebar, setSelectedService, setSelectedMenuSections} } = useStore();
   const navigate = useNavigate();
+
+  const onCreateParcelClick = () => {
+    navigate('/services/parcel/create/step-1'); 
+    isLeftSidebarOpened && toggleLeftSidebar(); 
+    setSelectedService(undefined);
+    setSelectedMenuSections([]);
+  }
 
 
   return (
@@ -39,7 +46,7 @@ const ServicesMenu = () => {
       <ServicesMenuHeader>
         <ServicesUserInfo />
         <InputSearch name="parcel-search" placeholder="Track your parcel" />
-        <Button onClick={() => navigate('/services/parcel/create/step-1')} contentStyle="thin"><PlusIcon />Create new</Button>
+        <Button onClick={ () => onCreateParcelClick() } contentStyle="thin"><PlusIcon />Create new</Button>
       </ServicesMenuHeader>
       <ServicesMenuBody>
         <Accordion data={menuItems}/>

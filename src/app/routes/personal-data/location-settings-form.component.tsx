@@ -1,25 +1,28 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import { observer } from "mobx-react-lite";
 import { useStore } from "../../stores/store";
 import Button, { BUTTON_TYPES } from "../../common/button/button.component";
 import { EditFormProps } from "../../features/services/services-subsection/services-subsection.component";
 import { PreferencesDataValues } from "../../models/preferencesDataValues";
 import { Form, Radio, Select } from 'antd';
+import InputSearchWithSidebar from "../../common/input-search-with-sidebar/input-search-with-sidebar.component";
+import {countryInfoList} from "../../assets/data/countryInfo";
+import {CountryListItem} from "../../models/countryListItem";
 const { Option } = Select;
 
-const PreferencesDataForm = ({ onCancel }: EditFormProps) => {
+const LocationSettingsForm = ({ onCancel }: EditFormProps) => {
   const [form] = Form.useForm();
   const { userStore: { user, isLoadingUser, updatePreferences }, localizationsStore } = useStore();
 
-  const handleToggle = (unit: string) => {
-    return unit;
-  };
+  const initialCountry = localizationsStore.availableCountries.find((i) => i.countryCode === user?.country);
+  const [selectedCountry, setSelectedCountry] = useState(initialCountry ?? null);
+
 
   const initialValues = {
-    country: user?.country ?? "US",
-    lang: user?.lang ?? "en",
-    currency: user?.currency.toUpperCase() ?? "USD",
-    measures: user?.measures ?? 1,
+    country: user?.country,
+    lang: user?.lang || "en",
+    currency: user?.currency || "USD",
+    measures: user?.measures || 1,
   };
 
   const languages = localizationsStore.getAvailableLocalizations().map(({ code, languageLabel }) => ({
@@ -27,8 +30,6 @@ const PreferencesDataForm = ({ onCancel }: EditFormProps) => {
     label: languageLabel,
   }));
   const currencies = localizationsStore.getAvailableCurrencies();
-
-  const countries = localizationsStore.getAvailableCountries();
 
   const handleFormSubmit = async (values: PreferencesDataValues) => {
     try {
@@ -40,24 +41,35 @@ const PreferencesDataForm = ({ onCancel }: EditFormProps) => {
     }
   };
 
+  useEffect(() => {
+    if (selectedCountry) {
+      form.setFieldValue('country', selectedCountry.countryCode);
+    }
+  }, [selectedCountry, form]);
+
   return (
       <Form initialValues={initialValues} layout="vertical" form={form} onFinish={(values) => handleFormSubmit(values)}>
-        <div className="inputs">
+        <div className="location-inputs">
           <Form.Item label="Country" name="country">
-            <Select
-                dropdownStyle={{fontFamily: 'Montserrat'}}
-                placeholder="Select country"
-            >
-              {countries.map((country) => (
-                  <Option key={country.value} value={country.value}>
-                    {country.label}
-                  </Option>
-              ))}
-            </Select>
+            <InputSearchWithSidebar<CountryListItem>
+                name="country"
+                inputValue={(selectedCountry?.flagEmoji || '') + (' ' + selectedCountry?.countryName || '')}
+                placeholder=""
+                sidebarTitle="Country"
+                displayAllOptionsWithEmptyFilter
+                onSearchOptionSelected={(selectedCountry: CountryListItem) => setSelectedCountry(selectedCountry)}
+                sidebarInputPlaceholder="Start typing country"
+                getSearchOptions={(filter) => filter 
+                  ? Promise.resolve(countryInfoList.filter((i) => i.countryName.toLowerCase().includes(filter.toLocaleLowerCase()))) 
+                  : Promise.resolve(countryInfoList)}
+                getKeyForSearchOption={(country: CountryListItem) => country.countryCode}
+                getDisplayValueForSearchOption={(country) => `${country.flagEmoji} ${country.countryName}`}
+            />
           </Form.Item>
 
           <Form.Item label="Language" name="lang">
             <Select
+                size="large"
                 dropdownStyle={{fontFamily: 'Montserrat'}}
                 placeholder="Select language"
             >
@@ -71,6 +83,7 @@ const PreferencesDataForm = ({ onCancel }: EditFormProps) => {
 
           <Form.Item label="Currency" name="currency">
             <Select
+                size="large"
                 dropdownStyle={{fontFamily: 'Montserrat'}}
                 placeholder="Select currency">
               {currencies.map((currency) => (
@@ -101,4 +114,4 @@ const PreferencesDataForm = ({ onCancel }: EditFormProps) => {
   );
 };
 
-export default observer(PreferencesDataForm);
+export default observer(LocationSettingsForm);

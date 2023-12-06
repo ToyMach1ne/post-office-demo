@@ -3,7 +3,6 @@ import App from "./App";
 import Authorization from "./app/routes/authorization/authorization.component";
 import EmailActionRouter from "./app/routes/email-action-router/email-action-router.component";
 import PersonalData from "./app/routes/personal-data/personal-data.component";
-import Preferences from "./app/routes/preferences/preferences.component";
 import Services from "./app/routes/services/services.component";
 import SecuritySettings from "./app/routes/security-settings/security-settings.component";
 import NotFound from "./app/routes/not-found/not-found.component";
@@ -29,7 +28,6 @@ export const routes: RouteObject[] = [
       { path: 'services', element: <Services />,
         children: [
           { path: 'personaldata', element: <PersonalData />},
-          { path: 'preferences', element: <Preferences />},
           { path: 'securitysettings', element: <SecuritySettings />},
           { path: 'parcel/create', element: <ParcelCreation />,
             children: [

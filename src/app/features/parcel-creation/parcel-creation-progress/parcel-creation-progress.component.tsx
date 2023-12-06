@@ -10,7 +10,7 @@ const ParcelCreationProgress = () => {
   const { parcelCreationStore: { currentStepNumber, parcelCreationSteps, maxStep, countryDeparture, countryDestination, validateCurrentStep }} = useStore();
 
   return (
-    <ParcelCreationProgressContainer>
+    <ParcelCreationProgressContainer id="parcelProgressDesktop">
       <HeaderSecondary>{'Create new shipment'}</HeaderSecondary>
       {parcelCreationSteps.map((step) => (
         <ParcelStepTitle key={step.stepNumber} 
@@ -18,11 +18,16 @@ const ParcelCreationProgress = () => {
           isActive={step.stepNumber === currentStepNumber}
           isLastStep={step.stepNumber === maxStep} /> 
       ))}
-      <Button 
+      <Button mt={"4rem"}
           disabled={!validateCurrentStep()}
           content='Next step' onClick={() => {
           console.log('dep', countryDeparture?.countryCode, countryDeparture?.zipCode);
           console.log('dest', countryDestination?.countryCode, countryDestination?.zipCode);
+          console.log('dimen', countryDestination?.maxSizeX);
+          console.log('dimen', countryDestination?.maxSizeY);
+          console.log('dimen', countryDestination?.maxSizeZ);
+          console.log('dimen', countryDestination?.maxWeight);
+          console.log('dimen', countryDestination?.maxVolWeight);
       }}/>
     </ParcelCreationProgressContainer>
   )

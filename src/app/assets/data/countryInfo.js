@@ -1374,11 +1374,11 @@ export const countryInfoList = [
       callingCode: "380"
   },
   {
-      countryCode: "UA",
-      countryName: "Ukraine",
-      flagEmoji: "🇺🇦",
-      callingCode: "380"
-  },   
+    countryCode: "UA",
+    countryName: "Ukraine",
+    flagEmoji: "🇺🇦",
+    callingCode: "380"
+  },
   {
       countryCode: "UG",
       countryName: "Uganda",

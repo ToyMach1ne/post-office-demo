@@ -137,12 +137,14 @@ export default class NavStore {
   }
 
   // title:item e.g. Account Setting:Personal Data => navigates to services/preferences
-  setSelectedService = (service: string, navigate: NavigateFunction) => {
-    if (!ImplementedServices.includes(service)) {
-      navigate('/coming-soon');
-    } else {
-      const servicesRoute = "/services/" + service.split(':')[1].replace(' ', '').toLocaleLowerCase();
-      navigate(servicesRoute);
+  setSelectedService = (service?: string, navigate?: NavigateFunction) => {
+    if (service && navigate) {
+      if (!ImplementedServices.includes(service)) {
+        navigate('/coming-soon');
+      } else {
+        const servicesRoute = "/services/" + service.split(':')[1].replace(' ', '').toLocaleLowerCase();
+        navigate(servicesRoute);
+      }
     }
     runInAction(() => {
       this.selectedService = service;

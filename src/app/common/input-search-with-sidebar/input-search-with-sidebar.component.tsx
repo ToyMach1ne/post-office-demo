@@ -1,14 +1,11 @@
-import { TextFormError, TextLabel, TextSearchOption } from "../typography/typography.styles";
-import { InputContainer } from "../form-field-text/form-field-text.styles";
-import { ReactComponent as SearchIcon } from "../../assets/magnifying-glass-icon.svg";
-import { InputSearchContainer } from "./input-search-with-sidebar.styles";
-import { MouseEventHandler, useEffect, useRef, useState } from "react";
+import { TextFormError, TextSearchOption } from "../typography/typography.styles";
+import { useEffect, useState } from "react";
 import { useStore } from "../../stores/store";
 import InputSearch from "../input-search/input-search.component";
 import Sidebar from "../sidebar-right/sidebar.component";
 import { DropdownOption, DropdownPopup } from "../form-field-phone/phone-code-dropdown/phone-code-dropdown.styles";
-import { IconContainer } from "../input-search/input-search.styles";
 import { observer } from "mobx-react-lite";
+import { InputSearchWithSidebarContainer } from "./input-search-with-sidebar.styles";
 
 interface Props<T> {
   inputValue?: string;
@@ -19,7 +16,7 @@ interface Props<T> {
   label?: string;
   tabIndex?: number;
   disabled?: boolean;
-  onMainInputClick?: MouseEventHandler<HTMLInputElement>;
+  onMainInputClick?: () => void;
 
   // Allows user to modify selected option manually
   canModifyInput?: boolean;
@@ -27,6 +24,7 @@ interface Props<T> {
   
   // where to get search options and how to filter them and how to display
   displayAllOptionsWithEmptyFilter?: boolean;
+  isOptionsEqual?: (a: T | undefined, b: T | undefined) => boolean;
   getSearchOptions: (inputFilterValue?: string) => Promise<T[]>
   getKeyForSearchOption?: (option: T) => string
   getDisplayValueForSearchOption?: (option: T) => string
@@ -37,11 +35,6 @@ interface Props<T> {
   mainInputValidationPredicate?: (inputValue?: string) => boolean;
   errorMessage?: string;
 }
-
-
-// TODO: Improvements:
-// 1) Should add possibility to modify selected value manually
-// 2) Should run validation only after sidebar was closed
 
 // Generic search input which opens sidebar with search (non-field version)
 const InputSearchWithSidebar = <T, >({ name,
@@ -57,7 +50,8 @@ const InputSearchWithSidebar = <T, >({ name,
   canModifyInput,
   onInputChange,
   onMainInputClick,
-  displayAllOptionsWithEmptyFilter, 
+  displayAllOptionsWithEmptyFilter,
+  isOptionsEqual, 
   getSearchOptions,
   getKeyForSearchOption,
   getDisplayValueForSearchOption,
@@ -68,12 +62,11 @@ const InputSearchWithSidebar = <T, >({ name,
   const { navStore: { isSidebarOpened, toggleSidebarByName } } = useStore();
 
   const [searchOptions, setSearchOptions] = useState<T[]>([]);
+  const [selectedOption, setSelectedOption] = useState<T | undefined>();
   const [touched, setTouched] = useState(false);
   const [isError, setIsError] = useState(false);
 
-  const mainInputRef = useRef(null);
-
-  const handleBlur = (e: any) => {
+  const handleBlur = () => {
     canModifyInput && setTouched(true);
   };
 
@@ -101,56 +94,56 @@ const InputSearchWithSidebar = <T, >({ name,
   }
 
   const handleSearchOptionSelected = (option: T) => {
+    console.log((option as any).countryCode);
     onSearchOptionSelected && onSearchOptionSelected(option);
     onSearchFinished && onSearchFinished(); 
     toggleSidebarByName(name);
     modifyListOfDisplayedOptions();
+    setSelectedOption(option);
   }
 
-  const handleMainInputChange = (e: any) => {
+  const handleMainInputChange = (targetValue: string) => {
     canModifyInput && onInputChange && 
-    onInputChange(e.target.value);
+    onInputChange(targetValue);
   }
 
   return (
-    <InputSearchContainer mb={"2.4rem"} isDisabeld={disabled}>
-      <TextLabel htmlFor={name}>{label}</TextLabel>
-      <InputContainer
-        onClick={() => !canModifyInput && !disabled && toggleSidebarByName(name)} 
-        error={isError}>
-        <IconContainer onClick={() => canModifyInput && !disabled && toggleSidebarByName(name)}>
-          <SearchIcon />
-        </IconContainer>
-        <input
-          style={{cursor: canModifyInput ? 'text': 'pointer'}} 
-          ref={mainInputRef}
+    <InputSearchWithSidebarContainer mb={"2.4rem"} isDisabled={disabled}>
+      <InputSearch name={name}
+          inputValue={inputValue ?? ''}
+          label={label}
+          placeholder={placeholder}
           disabled={disabled}
-          onBlur={handleBlur}
-          onClick={onMainInputClick}
+          readOnly={!canModifyInput}
+          autoComplete="off"
           tabIndex={tabIndex ?? -1}
           type='text'
-          id={name}
-          name={name}
-          value={inputValue ?? ''}
+          searchIconPosition="right"
+          treatWholeInputAsSearch={!canModifyInput}
+          isError={isError}
           onChange={handleMainInputChange}
-          readOnly={!canModifyInput}
-          placeholder={placeholder}
-          required
-          formNoValidate={true}
-          autoComplete="off"
-        />
-      </InputContainer>
+          onBlur={handleBlur}
+          onInputClick={onMainInputClick}
+          onInputContainerClick={() => !canModifyInput && !disabled && toggleSidebarByName(name)}
+          onSearchIconClick={() => canModifyInput && !disabled && toggleSidebarByName(name)}
+
+          inputStyle={{cursor: canModifyInput ? 'text': 'pointer'}}
+      />
 
       <Sidebar name={name} withBlurredBackground header={sidebarTitle} onClose={() => { modifyListOfDisplayedOptions(); setTouched(true); }}>
         <InputSearch name={"search_" + sidebarTitle}
           placeholder={sidebarInputPlaceholder}
           focusOnOpen={true}
+          searchIconPosition="left"
+          disableSearchIconHover={true}
           onChange={(targetValue) => modifyListOfDisplayedOptions(targetValue)}
         />
         <DropdownPopup isOpened={isSidebarOpened}>
           {searchOptions.length > 0 && searchOptions.map((option) => 
-            (<DropdownOption key={getKeyForSearchOption ? getKeyForSearchOption(option) : (option as string)} 
-                              onClick={() => handleSearchOptionSelected(option)}>
+            (<DropdownOption key={getKeyForSearchOption ? getKeyForSearchOption(option) : (option as string)}
+                             isSelected={isOptionsEqual && isOptionsEqual(option, selectedOption)}
+                             displayCheckMarkForSelected 
+                             onClick={() => handleSearchOptionSelected(option)}>
               <TextSearchOption>{getDisplayValueForSearchOption ? getDisplayValueForSearchOption(option) : (option as string)}</TextSearchOption>
             </DropdownOption>)
           )}
@@ -160,7 +153,7 @@ const InputSearchWithSidebar = <T, >({ name,
       { 
         isError && (<TextFormError>{errorMessage}</TextFormError>)
       }
-    </InputSearchContainer>
+    </InputSearchWithSidebarContainer>
   )
 }
 

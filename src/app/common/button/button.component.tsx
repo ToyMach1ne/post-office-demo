@@ -8,6 +8,7 @@ import {
   InvertedDangerButton,
   DangerButton
 } from "./button.styles";
+import { MarginProps } from "../../../global.styles";
 import { ReactComponent as GoogleIcon } from "../../assets/google-icon.svg";
 import { ReactComponent as AppleIcon } from "../../assets/apple-icon.svg";
 
@@ -31,6 +32,7 @@ interface Props {
   disabled?: boolean;
   type?: any;
   onClick?: any;
+  id?: string;
 }
 
 const getButton = (type = BUTTON_TYPES.base): typeof BaseButton =>
@@ -44,10 +46,17 @@ const getButton = (type = BUTTON_TYPES.base): typeof BaseButton =>
   [BUTTON_TYPES.apple]: AppleSigninButton,
 }[type]);
 
-const Button = ({ content, isLoading, buttonType, children, type, tabIndex, disabled, onClick, contentStyle }: Props) => {
+const Button = ({ content, isLoading, buttonType, children, type, tabIndex, disabled, onClick, contentStyle, id, mr, ml, mt, mb }: Props & MarginProps) => {
   const CustomButton = getButton(buttonType);
   return (
-    <CustomButton isLoading={isLoading} type={type} tabIndex={tabIndex} disabled={disabled} onClick={onClick} contentStyle={contentStyle}>
+    <CustomButton isLoading={isLoading} 
+      type={type} 
+      tabIndex={tabIndex} 
+      disabled={disabled} 
+      onClick={onClick} 
+      contentStyle={contentStyle} 
+      id={id} 
+      mr={mr} mb={mb} mt={mt} ml={ml}>
       {!isLoading && buttonType === BUTTON_TYPES.google && <GoogleIcon />}
       {!isLoading && buttonType === BUTTON_TYPES.apple && <AppleIcon />}
       {isLoading

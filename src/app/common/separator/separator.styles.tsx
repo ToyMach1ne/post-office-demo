@@ -1,4 +1,4 @@
-import styled from "styled-components"
+import styled, { css } from "styled-components"
 import { Colors, FontSizes } from "../typography/typography.styles"
 
 export const SeparatorContainer = styled.div`
@@ -16,9 +16,16 @@ export const SeparatorContainer = styled.div`
   text-transform: uppercase;
 `
 
-export const SeparatorLine = styled.span`
+interface Props {
+  width?: string;
+}
+
+export const SeparatorLine = styled.span<Props>`
   display: inline-block;
-  width: 35%;
+  ${({width}) => width
+    ? css`width: ${width};`
+    : css`width: 35%;`
+  }
   height: 2px;
   background-color: ${Colors.grayLight4};
 `
