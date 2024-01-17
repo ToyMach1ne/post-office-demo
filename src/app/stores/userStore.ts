@@ -8,21 +8,14 @@ import {
   signInWithEmailAndPasswordAsync, 
   sendPasswordResetEmailAsync, 
   confirmPasswordResetAsync,
-  // signInWithGoogleRedirectAsync,
-  // getRedirectResultAsync,
-  // signInWithAppleRedirectAsync,
   confirmEmailVerification,
   signInWithGooglePopup,
   signInWithApplePopup,
   handleFirebaseError,
   updatePasswordForUser,
 } from "../utils/firebase/firebase.utils";
-import { PersonalDataValues } from "../models/personalDataValues";
-import { ContactDetailsValues } from "../models/contactDetailsValues";
-import {PreferencesDataValues} from "../models/preferencesDataValues";
 import { FirebaseError } from "firebase/app";
 import { getCountryName } from "../common/form-field-phone/form-field-phone.component";
-import { AddressDataValues } from "../models/addressDataValues";
 import { AxiosError } from "axios";
 
 export default class UserStore {
@@ -290,86 +283,6 @@ export default class UserStore {
     }
   }
 
-
-  // Updates first_name, last_name and middle_name for currently logged in user.
-  updatePersonalData = async (personalData: PersonalDataValues) => {
-    if (!this.user) return;
-    
-    this.isLoadingUser = true;
-    try {
-      const updatedUser = await agent.Profile.updatePersonalData(personalData);
-
-      runInAction(() => {
-        this.user! = updatedUser!;
-      });
-    } catch (error) {
-      handleError(error);
-    } finally {
-      runInAction(() => {
-        this.isLoadingUser = false;
-      })
-    }
-  }
-
-  // Updates user localization settings
-  updatePreferences = async (preferences: PreferencesDataValues) => {
-    console.log(preferences);
-    if (!this.user) return;
-
-    this.isLoadingUser = true;
-    try {
-      const updatedUser = await agent.Profile.updatePreferences(preferences);
-
-      runInAction(() => {
-        this.user! = updatedUser!;
-      });
-    } catch (error) {
-      handleError(error);
-    } finally {
-      runInAction(() => {
-        this.isLoadingUser = false;
-      })
-    }
-  }
-
-  updateContactInfo = async (contactDetails: ContactDetailsValues) => {
-    if (!this.user) return;
-    
-    this.isLoadingUser = true;
-    try {
-      const updatedUser = await agent.Profile.updateContactInfo(contactDetails);
-
-      runInAction(() => {
-        this.user! = updatedUser!;
-      });
-    } catch (error) {
-      handleError(error);
-    } finally {
-      runInAction(() => {
-        this.isLoadingUser = false;
-      })
-    }
-  }
-
-  updateAddress = async (addressInfo: AddressDataValues) => {
-    if (!this.user) return;
-    
-    this.isLoadingUser = true;
-    try {
-      const updatedUser = await agent.Profile.updateAddress(addressInfo);
-
-      runInAction(() => {
-        this.user! = updatedUser!;
-      });
-    } catch (error) {
-      handleError(error);
-    } finally {
-      runInAction(() => {
-        this.isLoadingUser = false;
-      })
-    }
-  }
-
   logout = async (isDeleted = false) => {
     store.commonStore.appLoaded = false;
     try {
@@ -386,17 +299,6 @@ export default class UserStore {
         store.commonStore.setFirebaseUuid(null);
         store.commonStore.appLoaded = true;
       })
-    }
-  }
-
-  deleteAccount = ( firebaseMeta: any ) => {
-    if (!this.user) return;
-    this.isLoadingUser = true;
-    try {
-      agent.Profile.deleteAccount({firebase_uid: firebaseMeta.firebaseUuid, firebase_token: firebaseMeta.firebaseToken})
-          .then(() => this.logout(true));
-    } catch (error) {
-      console.log(error);
     }
   }
 }

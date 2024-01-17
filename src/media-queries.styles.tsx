@@ -14,11 +14,7 @@ import { UserNavBtn, UserNavContainer, UserNavMobileContainer } from "./app/feat
 import { ServicesSubSectionContainer, SubSectionDataItem } from "./app/features/services/services-subsection/services-subsection.styles";
 import { ServicePageContainer } from "./app/features/services/services-page-container/services-page-container.styles";
 import { ServicesRouteContainer, ServicesRouteMobile } from "./app/routes/services/services.styles";
-import { SecuritySettingsContainer } from "./app/routes/security-settings/security-settings.styles";
 import { StatusPageButtonsContainer, StatusPageCenteredContent } from "./app/common/status-page/status-page.styles";
-import { ParcelDetailsSeachInputsContainer } from "./app/routes/parcel-details/parcel-details.styles";
-import { ParcelStepRightContainer } from "./app/features/parcel-creation/parcel-step-right-container/parcel-step-right-container.styles";
-import { ParcelStepLeftContainer } from "./app/features/parcel-creation/parcel-step-left-container/parcel-step-left-container.styles";
 
 export const MediaQueries = css`
 
@@ -55,12 +51,6 @@ export const MediaQueries = css`
       grid-template-columns: 1fr;
       justify-items: center;
       row-gap: 1.6rem;
-    }
-  }
-
-  @media (max-width: 1200px) {
-    ${ParcelDetailsSeachInputsContainer} {
-      flex-direction: column;
     }
   }
 
@@ -186,12 +176,6 @@ export const MediaQueries = css`
      }
     }
 
-    ${SecuritySettingsContainer} {
-      form .inputs {
-        max-width: 100%;
-      }
-    }
-
     ${StatusPageCenteredContent} {
       svg {
         width: 35rem;
@@ -200,14 +184,6 @@ export const MediaQueries = css`
       ${StatusPageButtonsContainer} {
         padding: 0 3rem;
       }
-    }
-
-    ${ParcelStepRightContainer} {
-      display: none;
-    }
-
-    ${ParcelStepLeftContainer} {
-      margin-top: 5rem;
     }
 
     #parcelProgressMobile {
