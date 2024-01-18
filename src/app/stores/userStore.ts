@@ -15,7 +15,6 @@ import {
   updatePasswordForUser,
 } from "../utils/firebase/firebase.utils";
 import { FirebaseError } from "firebase/app";
-import { getCountryName } from "../common/form-field-phone/form-field-phone.component";
 import { AxiosError } from "axios";
 
 export default class UserStore {
@@ -52,16 +51,6 @@ export default class UserStore {
     if (this.user?.address?.apartment && this.user?.address?.building !== "") address += (address !== "" ? ", apt. " : "apt. " ) + this.user!.address?.apartment;
 
     return address !== "" ? address : null;
-  }
-
-  getCountryName = () => {
-    let countryName: string | undefined = undefined;
-
-    if (this.user?.country) {
-      countryName = getCountryName(this.user.country);
-    }
-
-    return countryName;
   }
 
   getUserName = (includeMiddleName: boolean = false) => {

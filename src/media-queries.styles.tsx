@@ -1,9 +1,8 @@
 import { css } from "styled-components";
 import { AuthContainer } from "./app/routes/authorization/authorization.styles";
-import { Colors, HeaderSecondary } from "./app/common/typography/typography.styles";
+import { Colors } from "./app/common/typography/typography.styles";
 import { NavigationContainer } from "./app/features/navigation/navigation.styles";
 import { PasswordValidatorContainer } from "./app/common/password-validator/password-validator.styles";
-import { SidebarContainer } from "./app/common/sidebar-right/sidebar.styles";
 import { FooterBottomContainer, FooterContainer, FooterTopContainer } from "./app/features/footer/footer.styles";
 import { NavLangButton } from "./app/features/navigation/nav-lang/nav-lang.styles";
 import { SignInNavButton } from "./app/features/navigation/nav-signin-btn/nav-signin.styles";
@@ -31,12 +30,6 @@ export const MediaQueries = css`
   @media (max-height: 800px) {
     ${ServicesContainer} {
       height: 70rem;
-    }
-  }
-
-  @media (max-height: 720px) {
-    ${SidebarContainer} {
-      overflow: scroll;
     }
   }
 
@@ -97,15 +90,6 @@ export const MediaQueries = css`
       padding: 5rem;
       margin-top: 0;
       border-radius: 0;
-    }
-
-    ${SidebarContainer} {
-      width: 100%;
-
-      ${HeaderSecondary} {
-        padding-left: 2.4rem;
-        margin-bottom: 0;
-      }
     }
 
     ${UserNavContainer} {
