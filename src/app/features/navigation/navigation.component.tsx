@@ -19,7 +19,7 @@ const Navigation = () => {
   const currentPath = location.pathname;
 
   return (
-    <NavigationContainer>
+    <NavigationContainer className="redBack">
       <NavContent>
         <LeftSide>
           <LogoContainer to="/">

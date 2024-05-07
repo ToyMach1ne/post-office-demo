@@ -51,7 +51,6 @@ export default class CommonStore {
           this.appLoaded = false;
           localStorage.setItem('meest_token', meestToken);
           await store.userStore.getCurrentUser();
-          runInAction(() => store.navStore.isSidebarOpened = false);
           router.navigate("/");
           this.setAppLoaded(true);
         }

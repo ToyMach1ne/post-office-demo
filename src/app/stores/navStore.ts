@@ -2,9 +2,6 @@ import { makeAutoObservable, runInAction } from "mobx";
 import { NavigateFunction } from "react-router-dom";
 
 export default class NavStore {
-  sidebarOpenedName: string | null = null; 
-  isSidebarOpened: boolean = false;
-  isSidebarClosing: boolean = false;
 
   isBottomSidebarOpened: boolean = false;
   isBottomSidebarClosing: boolean = false;
@@ -24,46 +21,6 @@ export default class NavStore {
 
   constructor() {
     makeAutoObservable(this);
-  }
-
-  toggleSidebar = () => {
-    if (this.isSidebarOpened) {
-      runInAction(() => {this.isSidebarOpened = false});
-      runInAction(() => {this.isSidebarClosing = true});
-
-      setTimeout(() => {
-        runInAction(() => {this.isSidebarClosing = false;}); 
-      }, 400);
-    } else {
-      runInAction(() => {this.isSidebarOpened = true});
-    }  
-  }
-
-  // allows to have multiple components referencing right sidebar on same page
-  toggleSidebarByName = (name: string) => {
-    if (!this.sidebarOpenedName) {
-      // this means that no sidebar is opened
-      this.sidebarOpenedName = name;
-
-    } else if (this.sidebarOpenedName !== name) {
-      // We can toggle only currently opened sidebar by its id
-      console.warn(`Cannot toggle sidebar with id ${name} because sidebar ${this.sidebarOpenedName} is already opened`)
-      return;
-    }
-
-    if (this.isSidebarOpened) {
-      runInAction(() => {this.isSidebarOpened = false});
-      runInAction(() => {this.isSidebarClosing = true});
-
-      setTimeout(() => {
-        runInAction(() => {
-          this.isSidebarClosing = false;
-          this.sidebarOpenedName = null;
-        }); 
-      }, 400);
-    } else {
-      runInAction(() => {this.isSidebarOpened = true});
-    }  
   }
 
   toggleBottomSidebar = () => {

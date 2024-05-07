@@ -1,6 +1,5 @@
 import styled from "styled-components";
 import { Colors, FontSizes, HeaderSecondary, TextServicesData } from "../../../common/typography/typography.styles";
-import { SidebarHeader } from "../../../common/sidebar-right/sidebar.styles";
 
 export const ServicesSubSectionContainer = styled.div`
   position: relative;
@@ -11,10 +10,6 @@ export const ServicesSubSectionContainer = styled.div`
 
   ${HeaderSecondary} {
     margin-bottom: 2.4rem;
-  }
-
-  ${SidebarHeader} > ${HeaderSecondary} {
-    margin-bottom: 0;
   }
 
   form {
