@@ -12,6 +12,8 @@ axios.interceptors.request.use(config => {
   const token = store.commonStore.meestToken;
   if (token && config) config.headers.Authorization = `Bearer ${token}`;
 
+  config.headers.set('Platform', 'web; app-version: 1.0.0');
+
   return config;
 })
 
