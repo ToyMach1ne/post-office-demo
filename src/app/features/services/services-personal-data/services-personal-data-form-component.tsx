@@ -51,11 +51,11 @@ export const PersonalDataForm = ({ setIsOpen }: UserInfoProps) => {
 
   let formInputs: PersonalDataFormValues = {
     email: user?.email ?? "",
-    phone: user?.phone.phone_number ?? "",
-    countryCode: user?.phone.country_code ?? "",
+    phone: user?.phone?.phone_number ?? "",
+    countryCode: user?.phone?.country_code ?? "",
   };
 
-  function handleSubmit({ email, phone, countryCode }: PersonalDataFormValues) {
+  function handleSubmit({ email, phone }: PersonalDataFormValues) {
     updateUserInfo(email, phone, countryCode);
     setIsOpen(false);
   }

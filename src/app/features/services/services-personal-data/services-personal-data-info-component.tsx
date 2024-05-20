@@ -18,7 +18,7 @@ export const PersonalDataInfo = () => {
       </PersonalDataRow>
       <PersonalDataRow>
         <PersonalDataLabelOpt>Phone Number</PersonalDataLabelOpt>
-        <PersonalDataOpt>{user?.phone.phone_number ?? ""}</PersonalDataOpt>
+        <PersonalDataOpt>{user?.phone?.phone_number ?? ""}</PersonalDataOpt>
       </PersonalDataRow>
     </>
   );
