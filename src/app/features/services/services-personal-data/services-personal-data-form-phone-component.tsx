@@ -28,15 +28,8 @@ export const FormFieldPhone = ({
   placeholder,
   label,
   children,
-  className,
-  code,
-  setCode,
-  countryCode,
-  setCountryCode,
 }: InputProps) => {
   const [field, meta] = useField(name);
-  const fullInputVal = code + field.value;
-  console.log(fullInputVal);
 
   const uuid = v4();
 
@@ -52,13 +45,6 @@ export const FormFieldPhone = ({
             required
             {...field}
             formNoValidate={true}
-          />
-          <input
-            id={name + uuid + 1}
-            placeholder={placeholder}
-            formNoValidate={true}
-            value={fullInputVal}
-            className="hidden"
           />
         </PhoneInputsContainer>
       </InputContainer>

@@ -11,6 +11,7 @@ import Button, { BUTTON_TYPES } from "../../../common/button/button.component";
 import { FormFieldPhone } from "./services-personal-data-form-phone-component";
 import { FormFieldCCode } from "./services-personal-data-form-code-input";
 import { FormFieldCountryCode } from "./services-personal-data-form-countryCode-component";
+import { countryInfoList } from "../../../assets/data/countryInfo";
 
 interface PersonalDataFormValues {
   email: string;
@@ -23,15 +24,51 @@ interface UserInfoProps {
   setIsOpen?: any;
 }
 
+function removeCodeFromPhone(phone: string, countryCode: string) {
+  let modifiedPhone = phone;
+  for (let i = 0; i <= countryInfoList.length; i++) {
+    const item = countryInfoList[i];
+    if (item.countryCode === countryCode) {
+      modifiedPhone = modifiedPhone.replace(item.callingCode, "");
+      break;
+    }
+  }
+
+  return modifiedPhone;
+}
+
+let callingCode: string;
+
+function getCallingCode(phone: string, countryCode: string) {
+  for (let i = 0; i <= countryInfoList.length; i++) {
+    const item = countryInfoList[i];
+    if (item.countryCode === countryCode) {
+      callingCode = item.callingCode;
+      break;
+    }
+  }
+
+  return `+${callingCode}`;
+}
+
 //Form Component of Personal Data
 export const PersonalDataForm = ({ setIsOpen }: UserInfoProps) => {
   const {
     userStore: { user, isLoadingUser, updateUserInfo },
   } = useStore();
-  const [code, setCode] = useState<string>("+380");
-  const [countryCode, setCountryCode] = useState<string>("UA");
-  const codeLengthMax = 12 - code.replace(/[+-]/g, "").length;
-  const codeLengthMin = 10 - code.replace(/[+-]/g, "").length;
+  const [code, setCode] = useState<string>(
+    () =>
+      getCallingCode(
+        user?.phone?.phone_number ?? "",
+        user?.phone?.country_code ?? ""
+      ) ?? "+380"
+  );
+  const [countryCode, setCountryCode] = useState<string>(
+    user?.phone?.country_code ?? "UA"
+  );
+
+  let minInputValue = 10 - code.replace(/[+-]/g, "").length;
+  let maxInputValue = 12 - code.replace(/[+-]/g, "").length;
 
   const validationSchema = Yup.object({
     email: Yup.string()
@@ -43,20 +80,25 @@ export const PersonalDataForm = ({ setIsOpen }: UserInfoProps) => {
 
     phone: Yup.string()
       .required("Phone is required.")
-      .min(codeLengthMin, "Phone must be at least 10 characters")
-      .max(codeLengthMax, "Phone must be at most 12 characters"),
+      .min(minInputValue, "Phone must be at least 10 characters")
+      .max(maxInputValue, "Phone must be at most 12 characters"),
 
     countryCode: Yup.string().required("Code is required."),
   });
 
   let formInputs: PersonalDataFormValues = {
     email: user?.email ?? "",
-    phone: user?.phone?.phone_number ?? "",
+    phone: removeCodeFromPhone(
+      user?.phone?.phone_number ?? "",
+      user?.phone?.country_code ?? ""
+    ),
     countryCode: user?.phone?.country_code ?? "",
   };
 
   function handleSubmit({ email, phone }: PersonalDataFormValues) {
-    updateUserInfo(email, phone, countryCode);
+    minInputValue = 10;
+    maxInputValue = 12;
+    updateUserInfo(email, code.replace(/[+-]/g, "") + phone, countryCode);
     setIsOpen(false);
   }
 

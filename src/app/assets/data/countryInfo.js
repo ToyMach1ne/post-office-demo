@@ -21,13 +21,13 @@ export const countryInfoList = [
     countryCode: "AG",
     countryName: "Antigua and Barbuda",
     flagEmoji: "🇦🇬",
-    callingCode: "1-268",
+    callingCode: "268",
   },
   {
     countryCode: "AI",
     countryName: "Anguilla",
     flagEmoji: "🇦🇮",
-    callingCode: "1-264",
+    callingCode: "264",
   },
   {
     countryCode: "AL",
