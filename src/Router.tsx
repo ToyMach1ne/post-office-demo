@@ -6,25 +6,35 @@ import Services from "./app/routes/services/services.component";
 import NotFound from "./app/routes/not-found/not-found.component";
 import ServerError from "./app/routes/server-error/server-error.component";
 import ComingSoon from "./app/routes/coming-soon/coming-soon.component";
+import PersonalData from "./app/features/services/services-personal-data/services-personal-data-component";
 
 export const routes: RouteObject[] = [
   {
-    path: '/',
+    path: "/",
     element: <App />,
     children: [
-      { path: 'auth', element: <Authorization /> },
-      { path: 'auth/action', element: <EmailActionRouter /> },
-      { path: 'not-found', element: <NotFound />},
-      { path: 'server-error', element: <ServerError />},
-      { path: 'coming-soon', element: <ComingSoon />},
-      { path: 'services', element: <Services />,
+      { path: "auth", element: <Authorization /> },
+      { path: "auth/action", element: <EmailActionRouter /> },
+      { path: "not-found", element: <NotFound /> },
+      { path: "server-error", element: <ServerError /> },
+      { path: "coming-soon", element: <ComingSoon /> },
+      {
+        path: "services",
+        element: <Services />,
         children: [
-          { path: 'parcel/create', element: <Navigate replace to='/not-found' /> },
-        ]
+          {
+            path: "parcel/create",
+            element: <Navigate replace to="/not-found" />,
+          },
+          {
+            path: "personaldata",
+            element: <PersonalData />,
+          },
+        ],
       },
-      { path: '*', element: <Navigate replace to='/not-found' /> },
-    ]
-  }
-]
+      { path: "*", element: <Navigate replace to="/not-found" /> },
+    ],
+  },
+];
 
 export const router = createBrowserRouter(routes);

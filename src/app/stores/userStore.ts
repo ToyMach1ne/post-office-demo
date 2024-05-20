@@ -3,10 +3,10 @@ import { User } from "../models/user";
 import { store } from "./store";
 import agent from "../api/agent";
 import {
-  createAuthUserWithEmailAndPassword, 
-  sendEmailVerificationAsync, 
-  signInWithEmailAndPasswordAsync, 
-  sendPasswordResetEmailAsync, 
+  createAuthUserWithEmailAndPassword,
+  sendEmailVerificationAsync,
+  signInWithEmailAndPasswordAsync,
+  sendPasswordResetEmailAsync,
   confirmPasswordResetAsync,
   confirmEmailVerification,
   signInWithGooglePopup,
@@ -16,6 +16,7 @@ import {
 } from "../utils/firebase/firebase.utils";
 import { FirebaseError } from "firebase/app";
 import { AxiosError } from "axios";
+import { UpdateContactInfoRequest } from "../models/updateContactInfoRequest";
 
 export default class UserStore {
   user: User | null = null;
@@ -35,23 +36,28 @@ export default class UserStore {
     let initials = "";
 
     if (this.user?.first_name && this.user?.last_name) {
-      initials = this.user!.first_name.charAt(0) + this.user!.last_name.charAt(0);
+      initials =
+        this.user!.first_name.charAt(0) + this.user!.last_name.charAt(0);
     } else {
       initials = this.user!.email.slice(0, 2).toLocaleUpperCase();
     }
 
     return initials;
-  }
+  };
 
   getAddress = () => {
     let address: string = "";
 
-    if (this.user?.address?.building && this.user?.address?.building !== "") address += this.user!.address?.building;
-    if (this.user?.address?.street && this.user?.address?.building !== "") address += (address !== "" ? " " : "" ) + this.user!.address?.street;
-    if (this.user?.address?.apartment && this.user?.address?.building !== "") address += (address !== "" ? ", apt. " : "apt. " ) + this.user!.address?.apartment;
+    if (this.user?.address?.building && this.user?.address?.building !== "")
+      address += this.user!.address?.building;
+    if (this.user?.address?.street && this.user?.address?.building !== "")
+      address += (address !== "" ? " " : "") + this.user!.address?.street;
+    if (this.user?.address?.apartment && this.user?.address?.building !== "")
+      address +=
+        (address !== "" ? ", apt. " : "apt. ") + this.user!.address?.apartment;
 
     return address !== "" ? address : null;
-  }
+  };
 
   getUserName = (includeMiddleName: boolean = false) => {
     const fullName: (string | undefined | null)[] = [];
@@ -62,8 +68,8 @@ export default class UserStore {
     if (includeMiddleName) fullName.push(this.user?.middle_name);
     fullName.push(this.user?.last_name);
 
-    return fullName.filter(x => x).join(' ');
-  }
+    return fullName.filter((x) => x).join(" ");
+  };
 
   googleLogin = async () => {
     this.googleSignInProgress = true;
@@ -71,32 +77,31 @@ export default class UserStore {
       const authUser = await signInWithGooglePopup();
       // await signInWithGoogleRedirectAsync();
       // const authUser = await getRedirectResultAsync();
-      
+
       // if (!authUser) return;
 
       const firebaseToken = (authUser.user as any).accessToken;
       const firebaseUid = authUser.user.uid;
 
-
       const meestToken = await agent.Auth.socialLogin(
         firebaseUid,
         firebaseToken,
-        store.commonStore.getDeviceUuid, 
+        store.commonStore.getDeviceUuid
       );
 
       runInAction(() => {
         store.commonStore.setMeestToken(meestToken ?? null);
         store.commonStore.setFirebaseUuid(firebaseUid ?? null);
-        store.commonStore.setFirebaseToken(firebaseToken ?? null);    
-      })
+        store.commonStore.setFirebaseToken(firebaseToken ?? null);
+      });
     } catch (error) {
       handleError(error);
     } finally {
       runInAction(() => {
         this.googleSignInProgress = false;
-      })
+      });
     }
-  }
+  };
 
   appleLogin = async () => {
     this.appleSignInProgress = true;
@@ -104,7 +109,7 @@ export default class UserStore {
       const authUser = await signInWithApplePopup();
       // await signInWithAppleRedirectAsync();
       // const authUser = await getRedirectResultAsync();
-      
+
       // if (!authUser) return;
 
       const firebaseToken = (authUser.user as any).accessToken;
@@ -113,28 +118,28 @@ export default class UserStore {
       const meestToken = await agent.Auth.socialLogin(
         firebaseUid,
         firebaseToken,
-        store.commonStore.getDeviceUuid, 
+        store.commonStore.getDeviceUuid
       );
 
       runInAction(() => {
         runInAction(() => {
           store.commonStore.setMeestToken(meestToken ?? null);
           store.commonStore.setFirebaseUuid(firebaseUid ?? null);
-          store.commonStore.setFirebaseToken(firebaseToken ?? null);    
-        })    
-      })
+          store.commonStore.setFirebaseToken(firebaseToken ?? null);
+        });
+      });
     } catch (error) {
       handleError(error);
     } finally {
       runInAction(() => {
         this.appleSignInProgress = false;
-      })
+      });
     }
-  }
+  };
 
   emailLogin = async (email: string, password: string) => {
     this.emailSignInProgress = true;
-    
+
     try {
       const authUser = await signInWithEmailAndPasswordAsync(email, password);
 
@@ -145,27 +150,34 @@ export default class UserStore {
       const firebaseToken = (authUser.user as any).accessToken;
       const firebaseUid = authUser.user.uid;
 
-      const meestToken = await agent.Auth.login(firebaseUid, firebaseToken, store.commonStore.getDeviceUuid);
+      const meestToken = await agent.Auth.login(
+        firebaseUid,
+        firebaseToken,
+        store.commonStore.getDeviceUuid
+      );
 
       runInAction(() => {
         store.commonStore.setMeestToken(meestToken ?? null);
         store.commonStore.setFirebaseUuid(firebaseUid ?? null);
-        store.commonStore.setFirebaseToken(firebaseToken ?? null);    
-      })
+        store.commonStore.setFirebaseToken(firebaseToken ?? null);
+      });
     } catch (error) {
       handleError(error);
     } finally {
       runInAction(() => {
         this.emailSignInProgress = false;
-      })
+      });
     }
-  }
+  };
 
   signUp = async (email: string, password: string) => {
     this.signUpInProgress = true;
-    
+
     try {
-      const authUser = await createAuthUserWithEmailAndPassword(email, password);
+      const authUser = await createAuthUserWithEmailAndPassword(
+        email,
+        password
+      );
       const firebaseUid = authUser.user.uid;
       await sendEmailVerificationAsync();
 
@@ -178,13 +190,13 @@ export default class UserStore {
     } finally {
       runInAction(() => {
         this.signUpInProgress = false;
-      })
+      });
     }
-  }
+  };
 
   signUpFinishEmailVerification = async (oobCode: string) => {
     this.emailVerificationProgress = true;
-    
+
     try {
       await confirmEmailVerification(oobCode);
     } catch (error) {
@@ -192,9 +204,9 @@ export default class UserStore {
     } finally {
       runInAction(() => {
         this.emailVerificationProgress = false;
-      })
+      });
     }
-  }
+  };
 
   // resetPassword start procedure
   resetPasswordStart = async (email: string) => {
@@ -211,14 +223,14 @@ export default class UserStore {
     } finally {
       runInAction(() => {
         this.passwordResetProgress = false;
-      })
+      });
     }
-  }
+  };
 
   // resetPassword finalize procedure after link from firebase received
   resetPasswordFinish = async (oobCode: string, newPassword: string) => {
     this.passwordResetProgress = true;
-    
+
     try {
       await confirmPasswordResetAsync(oobCode, newPassword);
     } catch (error) {
@@ -226,13 +238,13 @@ export default class UserStore {
     } finally {
       runInAction(() => {
         this.passwordResetProgress = false;
-      })
+      });
     }
-  }
+  };
 
   changePassword = async (oldPassword: string, newPassword: string) => {
     this.isLoadingUser = true;
-    
+
     try {
       await updatePasswordForUser(oldPassword, newPassword);
     } catch (error) {
@@ -240,9 +252,9 @@ export default class UserStore {
     } finally {
       runInAction(() => {
         this.isLoadingUser = false;
-      })
+      });
     }
-  }
+  };
 
   getCurrentUser = async () => {
     this.isLoadingUser = true;
@@ -253,11 +265,13 @@ export default class UserStore {
         this.user = user!;
       });
     } catch (error) {
-      
-      if (store.commonStore.meestToken !== "" && error instanceof AxiosError && error.response?.status === 401) {
+      if (
+        store.commonStore.meestToken !== "" &&
+        error instanceof AxiosError &&
+        error.response?.status === 401
+      ) {
         // ignore expired token error. Handled later in this catch
-      }
-      else {
+      } else {
         handleError(error);
       }
       // also set token to null. In such case it means that token is expired.
@@ -268,9 +282,9 @@ export default class UserStore {
     } finally {
       runInAction(() => {
         this.isLoadingUser = false;
-      })
+      });
     }
-  }
+  };
 
   logout = async (isDeleted = false) => {
     store.commonStore.appLoaded = false;
@@ -287,15 +301,46 @@ export default class UserStore {
         store.commonStore.setFirebaseToken(null);
         store.commonStore.setFirebaseUuid(null);
         store.commonStore.appLoaded = true;
-      })
+      });
     }
-  }
+  };
+
+  updateUserInfo = async (
+    email: string,
+    phone: string,
+    countryCode: string
+  ) => {
+    this.isLoadingUser = true;
+
+    const request: UpdateContactInfoRequest = {
+      email,
+      phone,
+      phone_country_code: countryCode,
+    };
+
+    try {
+      const updatedUserData = await agent.Profile.updateContactInfo(request);
+      runInAction(() => {
+        this.user = updatedUserData!;
+      });
+    } catch (error) {
+      handleError(error);
+    } finally {
+      runInAction(() => {
+        this.isLoadingUser = false;
+      });
+    }
+  };
 }
 
 export function handleError(error: any) {
   console.error(error);
 
-  if (store.commonStore.meestToken !== "" && error instanceof AxiosError && error.response?.status === 401) {
+  if (
+    store.commonStore.meestToken !== "" &&
+    error instanceof AxiosError &&
+    error.response?.status === 401
+  ) {
     store.commonStore.setMeestToken(null);
     store.commonStore.setDeviceUuid(null);
     store.commonStore.setFirebaseToken(null);
