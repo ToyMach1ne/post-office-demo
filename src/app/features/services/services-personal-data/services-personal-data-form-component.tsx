@@ -37,9 +37,8 @@ function removeCodeFromPhone(phone: string, countryCode: string) {
   return modifiedPhone;
 }
 
-let callingCode: string;
-
 function getCallingCode(phone: string, countryCode: string) {
+  let callingCode;
   for (let i = 0; i <= countryInfoList.length; i++) {
     const item = countryInfoList[i];
     if (item.countryCode === countryCode) {

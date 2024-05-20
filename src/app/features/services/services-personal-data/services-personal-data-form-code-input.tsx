@@ -18,9 +18,8 @@ interface InputCountryProps {
   setCountryCode?: (countryCode: string) => void;
 }
 
-let flagItem: string;
-
 function getCountryFlag(phone: string, countryCode: string) {
+  let flagItem;
   for (let i = 0; i <= countryInfoList.length; i++) {
     const item = countryInfoList[i];
     if (item.countryCode === countryCode) {
